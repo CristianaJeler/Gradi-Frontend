@@ -1,0 +1,40 @@
+*{
+    font-family: "Tahoma", sans-serif;
+}
+#login_page{
+    --ion-background-color:linear-gradient(90deg,
+    hsla(5, 100%, 81%, 1) 10%,
+    hsl(46, 76%, 92%) 20%,
+    hsl(168, 68%, 84%) 20%,
+    hsl(188, 45%, 78%) 30%);
+}
+.input{
+    margin: 5% auto;
+    background-color: rgba(255,252,252,0.7);
+    width: 90%;
+    border-radius: 5%;
+    height: 15%;
+    border:solid darkgrey 1px;
+}
+#loginBtn{
+    margin:auto 40%;
+    width: 20%;
+    background-color: #3ca4b5;
+    position: center;
+    border-radius: 5%;
+}
+
+#loginBtn:hover{
+    background-color: #6dbbc8;
+}
+
+.text{
+    color: #4d568d;
+}
+
+#login_grid{
+    margin: 5% auto;
+    height: 50%;
+    width: 50%;
+    --ion-card-background: url("../design/login/pencils.jpg") 0 0/100% 100%;
+}
