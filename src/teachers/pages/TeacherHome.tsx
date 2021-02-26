@@ -23,7 +23,7 @@ import {TeacherHeader} from "./TeacherHeader";
 import {book, home, list, logOut, settings, timer} from "ionicons/icons";
 import {LoginContext} from "../../authentication";
 import "./design/teachers.home.css"
-
+import defaultProfilePic from "../../assets/img/profile.png"
 export const TeacherHome: React.FC<RouteComponentProps> = () => {
     // const game = {
     //     width: "50%",
@@ -48,7 +48,7 @@ export const TeacherHome: React.FC<RouteComponentProps> = () => {
                     <IonList>
                         <IonMenuToggle autoHide={false} slot={"start"}>
                             <IonCard>
-                                <IonImg alt={"Profile picture"} id={"user_img"} src={"../Untitled.png"}/>
+                                <IonImg alt={"Profile picture"} id={"user_img"} src={defaultProfilePic}/>
                                 <IonCardSubtitle>user@gmail.com</IonCardSubtitle>
                             </IonCard>
 
