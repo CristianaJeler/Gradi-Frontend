@@ -1,0 +1,19 @@
+#img{
+    width: 5%;
+    height: 5%;
+    margin-right: 2%;
+    float: right;
+}
+
+#logoutBtn:hover{
+    --ion-color-base: #5a0505;
+    cursor: pointer;
+}
+
+#logoutBtn{
+    --ion-color-base: #0090ff;
+}
+
+#header{
+    --ion-background-color: #FAF3DB;
+}

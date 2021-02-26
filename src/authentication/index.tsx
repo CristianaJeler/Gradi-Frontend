@@ -1,3 +1,3 @@
-export * from './AuthenticationProvider';
-export * from './PrivateRoute';
-export * from './Login';
+export * from './provider/AuthenticationProvider';
+export * from './pages/PrivateRoute';
+export * from './pages/Login';

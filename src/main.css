@@ -1,3 +1,7 @@
 #tab_bar{
     --ion-background-color: #FAF3DB;
 }
+
+.ion-alert{
+    --ion-background-color:#FAF3DB;
+}

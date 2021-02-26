@@ -1,0 +1,58 @@
+*{
+    font-family: "Tahoma", sans-serif;
+}
+#login_page{
+    --ion-background-color:linear-gradient(90deg,
+    hsla(5, 100%, 81%, 1) 10%,
+    hsl(46, 76%, 92%) 20%,
+    hsl(168, 68%, 84%) 20%,
+    hsl(188, 45%, 78%) 30%);
+}
+.input{
+    margin: 5% auto;
+    background-color: rgba(255,252,252,0.9);
+    width: 90%;
+    border-radius: 5%;
+    height: 15%;
+    border:solid darkgrey 1px;
+}
+#loginBtn{
+    background-color: #3ca4b5;
+    border-radius: 5%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    max-width: 50%;
+}
+
+#loginBtn:hover{
+    background-color: #6dbbc8;
+    cursor: pointer;
+}
+#signupLink{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    text-align: center;
+    /*background: rgba(255, 255, 255, 0.9);*/
+    border-radius: 5%;
+    color: #3ca4b5;
+}
+
+#signupLink:hover{
+    color: #6dbbc8;
+    cursor: pointer;
+}
+
+.text{
+    color: #4d568d;
+}
+
+#login_grid{
+    margin: 5% auto;
+    height: 60%;
+    width: 40%;
+    --ion-card-background: url("../../../assets/img/myPencils.png") 0 0/100% 100%;
+    background-size: cover;
+}

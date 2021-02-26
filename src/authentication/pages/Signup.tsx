@@ -7,51 +7,60 @@ import {
     IonCard,
     IonContent, IonIcon,
     IonInput,
-    IonItem,
-    IonLabel,
     IonPage,
     IonSelect,
     IonSelectOption,
-    createAnimation
+    createAnimation,
+    IonLoading,
+    IonAlert
 } from "@ionic/react";
 
-import {closeCircle, eye, lockOpen, mail, peopleCircle, person} from "ionicons/icons";
-import {SignupContext} from "./AuthenticationProvider";
-import {getLogger} from '../core';
-import "./signup.page.css"
-import {LoginHeader} from "../design/login/LoginHeader";
-import {signup} from "./AuthenticationApi";
+import {eye, lockOpen, mail, person} from "ionicons/icons";
+// import {SignupContext} from "../provider/AuthenticationProvider";
+import {getLogger} from '../../core';
+import "./design/signup.page.css"
+import {AuthHeader} from "./design/AuthHeader";
+import {LoginContext, SignupContext} from "../provider/AuthenticationProvider";
+// import {signup} from "../api/AuthenticationApi";
 const log=getLogger("Login");
 
 interface SignupState{
     firstName?: string;
     lastName?:string;
     email?:string;
-    userType?:string;
-    kindergarten?:string;
+    status?:string;
     username?:string;
     password?:string;
     password_check?:string;
 }
 
-export const Signup: React.FC<RouteComponentProps>=()=>{
-    const {isSignedup, pendingSignup, signupError, }=useContext(SignupContext);
+export const Signup: React.FC<RouteComponentProps>=({history})=>{
+    const {isSignedup, pendingSignup, signupError, signup}=useContext(SignupContext);
     const [signupState, setState]=useState<SignupState>({});
-    const {firstName,lastName,email,userType,kindergarten,username, password, password_check}=signupState;
+    const {firstName,lastName,email,status,username, password, password_check}=signupState;
     const [passState,setPassState]=useState<boolean>(true)
+    const [showSignupError, setShowSignupError]=useState(false)
+
+    useEffect(() => {
+        return () => {
+            console.log("cleaned up");
+            setShowSignupError(false)
+        };
+    }, []);
     const handleSignup=()=>{
-        log('handleSignup...');
+        log('handleSignup...')
         if(password_check!==password) setPassState(false);
         else{
             setPassState(true);
-            signup?.(firstName,lastName,email,userType,kindergarten,username,password);
+            signup && signup({firstName: firstName||'',lastName:lastName || '',email:email ||'',status:status||'',username:username||'',password:password||''})
+                .then(()=>history.push("/login"));
         }
 
     };
-    log('render');
-    if(isSignedup){
-            return <Redirect to={{pathname:'/login'}}/>
-    }
+    // log('render');
+    // if(isSignedup){
+    //         return <Redirect to={{pathname:'/login'}}/>
+    // }
 
     const animation=function simpleAnimation() {
         const el = document.querySelector('#passwordCheck');
@@ -74,10 +83,10 @@ export const Signup: React.FC<RouteComponentProps>=()=>{
     }
     return(
         <IonPage>
-            <LoginHeader/>
+            <AuthHeader/>
             <IonContent  id={"signup_page"}>
                 <IonCard id={"signup_grid"}>
-                    <IonSelect placeholder={"Tipul de utilizator"} class={"signup_input"}>
+                    <IonSelect placeholder={"Tipul de utilizator"} class={"signup_input"} value={status} onIonChange={e=>setState({...signupState, status:e.detail.value||''})}>
                             <IonSelectOption value={"1"}>
                                 Educator
                             </IonSelectOption>
@@ -105,6 +114,24 @@ export const Signup: React.FC<RouteComponentProps>=()=>{
                             value={email}
                             onIonChange={e=>setState({...signupState, email:e.detail.value||''})}>
                         <IonIcon icon={mail}/>
+                    </IonInput>
+
+                    <IonInput
+                        type={"text"}
+                        id={"username"}
+                        className={"signup_input"}
+                        placeholder="Utilizator"
+                        value={username}
+                        onIonChange={e=>{
+                            setPassState(true);
+                            setState({...signupState, username:e.detail.value||''})
+                        }}>
+                        <IonIcon icon={person}/>
+                        <IonIcon className={"icon"} icon={eye}/>
+                        {!passState && (<CreateAnimation
+                            ref={animation}
+                        />)
+                        }
                     </IonInput>
 
                     <IonInput
@@ -136,9 +163,14 @@ export const Signup: React.FC<RouteComponentProps>=()=>{
                                />)
                            }
                        </IonInput>
-                    <IonButton onClick={handleSignup} id={"signupBtn"} color={"default"}>Signup</IonButton>
+                    <IonButton onClick={handleSignup} id={"signupBtn"} color={"default"}>Înregistrare</IonButton>
+                    <br/>
+                    <a href={"/login"} id={"signinLink"}>Am cont deja!</a>
                 </IonCard>
-            </IonContent>
+
+                {pendingSignup && <IonLoading cssClass="ion-loading" isOpen={true} message={"Înregistrare in curs ..."}/>}
+                {signupError && <IonAlert cssClass="ion-alert" isOpen={true} header="Înregistrarea a eșuat!" message={signupError.message}/>}
+                </IonContent>
         </IonPage>
     );
 };

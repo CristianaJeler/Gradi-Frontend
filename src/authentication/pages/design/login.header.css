@@ -1,0 +1,13 @@
+#img{
+    width: 5%;
+    height: 5%;
+    margin-left: 2%;
+}
+
+
+#img:hover{
+    cursor: pointer;
+}
+#header{
+    --ion-background-color: #FAF3DB;
+}

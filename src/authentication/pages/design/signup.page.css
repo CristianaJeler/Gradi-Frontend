@@ -1,0 +1,58 @@
+*{
+    font-family: "Tahoma", sans-serif;
+}
+#signup_page{
+    --ion-background-color:linear-gradient(90deg,
+    hsla(5, 100%, 81%, 1) 10%,
+    hsl(46, 76%, 92%) 20%,
+    hsl(168, 68%, 84%) 20%,
+    hsl(188, 45%, 78%) 30%);
+}
+.signup_input{
+    margin: 2% auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    width: 90%;
+    border-radius: 5%;
+    height: 7%;
+    border:solid darkgrey 1px;
+}
+#signupBtn{
+    margin-left:auto;
+    margin-right:auto;
+    display: block;
+    max-width: 25%;
+    background-color: #3ca4b5;
+    border-radius: 5%;
+}
+
+#signupBtn:hover{
+    background-color: #6dbbc8;
+    cursor: pointer;
+}
+
+#signinLink{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 20%;
+    text-align: center;
+    /*background: rgba(255, 255, 255, 0.7);*/
+    border-radius: 5%;
+    color: #3ca4b5;
+}
+#signinLink:hover{
+    cursor: pointer;
+    color: #6dbbc8;
+}
+
+#signup_grid{
+    margin: 2% auto;
+    height: 90%;
+    width: 60%;
+    --ion-card-background: url("../../../assets/img/myPencils.png") 0 0/100% 100%;
+    background-size: cover;
+}
+
+.icon{
+    margin-left: 5px;
+}

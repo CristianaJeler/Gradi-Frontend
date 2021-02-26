@@ -1,4 +1,4 @@
-export const baseUrl = 'localhost:3000';
+export const baseUrl = 'localhost:8080/gradi';
 
 export const getLogger: (tag: string) => (...args: any) => void =
     tag => (...args) => console.log(tag, ...args);
@@ -7,6 +7,7 @@ const log = getLogger('api');
 
 export interface ResponseProps<T> {
     data: T;
+    status:number;
 }
 
 export function withLogs<T>(promise: Promise<ResponseProps<T>>, fnName: string): Promise<T> {
@@ -14,12 +15,13 @@ export function withLogs<T>(promise: Promise<ResponseProps<T>>, fnName: string):
     return promise
         .then(res => {
             log(`${fnName} - succeeded`);
+            log(res.data)
             return Promise.resolve(res.data);
         })
-        .catch(err => {
+        .catch(err=> {
             log(`${fnName} - failed`);
             return Promise.reject(err);
-        });
+        })
 }
 
 export const config = {

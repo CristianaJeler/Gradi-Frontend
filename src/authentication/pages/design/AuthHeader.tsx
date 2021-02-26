@@ -1,12 +1,12 @@
 import React from "react";
 import {IonHeader, IonImg, IonToolbar} from "@ionic/react";
 import "./login.header.css"
-export const LoginHeader: React.FC = () => {
+export const AuthHeader: React.FC = () => {
     return (
         <>
             <IonHeader>
                 <IonToolbar id={"header"}>
-                <IonImg src={"./favicon.ico"} id={"img"}/>
+                <IonImg id={"img"} src={"../../../assets/img/pencils.jpg"}/>
                 </IonToolbar>
             </IonHeader>
         </>
