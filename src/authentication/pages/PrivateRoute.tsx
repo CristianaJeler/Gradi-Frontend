@@ -18,10 +18,13 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component
     return (
         <Route {...rest} render={props => {
             if (isAuthenticated) {
+                console.log("is Authenticated here")
                 // @ts-ignore
                 return <Component {...props} />;
             }
-            return <Redirect to={{ pathname: '/login' }}/>
+
+            console.log("Redirecting tho")
+            return <Redirect to={{ pathname: '/' }}/>
         }}/>
     );
 }

@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Redirect} from 'react-router-dom';
 import {RouteComponentProps} from "react-router-dom";
 import {
     CreateAnimation,
@@ -16,12 +15,10 @@ import {
 } from "@ionic/react";
 
 import {eye, lockOpen, mail, person} from "ionicons/icons";
-// import {SignupContext} from "../provider/AuthenticationProvider";
 import {getLogger} from '../../core';
 import "./design/signup.page.css"
-import {AuthHeader} from "./design/AuthHeader";
-import {LoginContext, SignupContext} from "../provider/AuthenticationProvider";
-// import {signup} from "../api/AuthenticationApi";
+import {AuthHeader} from "./AuthHeader";
+import {SignupContext} from "../provider/AuthenticationProvider";
 const log=getLogger("Login");
 
 interface SignupState{
@@ -35,7 +32,7 @@ interface SignupState{
 }
 
 export const Signup: React.FC<RouteComponentProps>=({history})=>{
-    const {isSignedup, pendingSignup, signupError, signup}=useContext(SignupContext);
+    const {isSigned, pendingSignup, signupError, signup}=useContext(SignupContext);
     const [signupState, setState]=useState<SignupState>({});
     const {firstName,lastName,email,status,username, password, password_check}=signupState;
     const [passState,setPassState]=useState<boolean>(true)
@@ -53,15 +50,11 @@ export const Signup: React.FC<RouteComponentProps>=({history})=>{
         else{
             setPassState(true);
             signup && signup({firstName: firstName||'',lastName:lastName || '',email:email ||'',status:status||'',username:username||'',password:password||''})
-                .then(()=>history.push("/login"));
+            // if(isSigned && signupError===null)  history.push("/login")
+            // else console.log(isSigned + " "+signupError)
         }
 
     };
-    // log('render');
-    // if(isSignedup){
-    //         return <Redirect to={{pathname:'/login'}}/>
-    // }
-
     const animation=function simpleAnimation() {
         const el = document.querySelector('#passwordCheck');
         if (el) {
@@ -169,8 +162,19 @@ export const Signup: React.FC<RouteComponentProps>=({history})=>{
                 </IonCard>
 
                 {pendingSignup && <IonLoading cssClass="ion-loading" isOpen={true} message={"Înregistrare in curs ..."}/>}
-                {signupError && <IonAlert cssClass="ion-alert" isOpen={true} header="Înregistrarea a eșuat!" message={signupError.message}/>}
-                </IonContent>
+                {signupError!==null && <IonAlert cssClass="ion-alert" isOpen={true} header="Înregistrarea a eșuat!" message={signupError.message}/>}
+                {isSigned && <IonAlert isOpen={true} header={"Felicitari!"} message={"Bun venit!\nMergi la pagina de autentificare?"} buttons={[
+                    {
+                        text: 'DA',
+                        handler: () => {
+                            history.push("/login");
+                        }
+                    },
+                    {
+                        text: 'NU'
+                    }
+                ]}/>}
+            </IonContent>
         </IonPage>
     );
 };

@@ -1,0 +1,34 @@
+#myFooter{
+    --ion-background-color: #f6ecc9;
+    height: auto;
+}
+
+#footerToolbar{
+    text-align: center;
+}
+
+.footerSocialIcon{
+    width: 20px;
+    height: 20px;
+}
+
+.footerSocialIcon:hover{
+    opacity: 50%;
+    cursor: pointer;
+}
+
+
+#fb{
+    color: #4d568d;
+}
+#insta{
+    color: #d74396;
+
+}
+#phone{
+    color: darkgreen;
+}
+#phoneCardSubtitle{
+    width: 100px;
+    display: inline;
+}

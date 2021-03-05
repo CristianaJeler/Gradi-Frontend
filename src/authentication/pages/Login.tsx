@@ -14,7 +14,7 @@ import {
 import {LoginContext} from "../provider/AuthenticationProvider";
 import {getLogger} from '../../core';
 import "./design/login.page.css"
-import {AuthHeader} from "./design/AuthHeader";
+import {AuthHeader} from "./AuthHeader";
 import {eye, lockOpen, person} from "ionicons/icons";
 
 const log = getLogger("Login");
@@ -41,13 +41,7 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
 
     log('render');
     if (isAuthenticated) {
-        console.log(userType)
-        switch (userType) {
-            case "1":
-                return <Redirect to={{pathname: '/teachers/home'}}/>
-            case '2':
-                return <Redirect to={{pathname: '/pupils/home'}}/>
-        }
+        return <Redirect to={{pathname: '/home'}}/>
     }
 
     return (
@@ -78,7 +72,7 @@ export const Login: React.FC<RouteComponentProps> = ({history}) => {
                         <IonAlert isOpen={true}
                                   cssClass={"ion-alert"}
                                   header={'Eroare de autentificare!'}
-                                  message={'Autentificare eșuată! Reîncercați!'}
+                                  message={'Nume de utilizator incorect sau parolă incorectă!'}
                         />
                     )}
 

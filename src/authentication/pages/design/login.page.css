@@ -53,6 +53,6 @@
     margin: 5% auto;
     height: 60%;
     width: 40%;
-    --ion-card-background: url("../../../assets/img/myPencils.png") 0 0/100% 100%;
+    --ion-card-background: url("../../../assets/img/background_stickers.png") 0 0/100% 100%;
     background-size: cover;
 }

@@ -1,0 +1,71 @@
+#user_img {
+    width: 150px;
+    height: 150px;
+    margin-right: auto;
+    margin-left: auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border-style: double;
+    border-color: #d69c09;
+}
+
+#settingsButton:hover{
+    cursor: pointer;
+}
+#settingsIcon:hover{
+    color: #584210;
+}
+#settingsIcon{
+    color: #d69c09;
+}
+
+
+.menuButton {
+    --ion-color-primary: transparent;
+    font-size: 18px;
+    display: inline-block;
+    width: 18%;
+    height: 100%;
+    text-align: center;
+    color: #051d5a;
+}
+
+.menuButton:hover{
+    cursor: pointer;
+    --ion-background-color: rgb(252, 247, 231);
+
+}
+
+#myMenu {
+    --ion-background-color: rgba(250, 243, 219, 0.7);
+}
+
+#profileMail {
+    text-align: center;
+    color: #4e3b00;
+    font-size: 20px;
+}
+
+.menuItem:hover {
+    cursor: pointer;
+    --ion-background-color: rgb(252, 247, 231);
+}
+
+#menuHeader {
+    text-align: center;
+    /*--ion-background-color: rgba(250,243,219,0.7);*/
+    --ion-background-color: #F6ECC9;
+}
+
+#menuPhotoAndNameCard {
+    --ion-background-color: #fcf7ee;
+}
+
+.menuIcon {
+    color: #d69c09;
+}
+
+.popoverItem:hover{
+    --ion-background-color: rgb(252, 247, 231);
+    cursor: pointer;
+}

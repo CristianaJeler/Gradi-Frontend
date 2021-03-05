@@ -30,9 +30,15 @@ export const config = {
     }
 };
 
-export const authConfig = (token?: string) => ({
+export const authorizationConfig = (token?: string) => ({
     headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+    }
+});
+export const pictureUpdateConfig = (token?: string) => ({
+    headers: {
+        'Content-Type': 'multipart/form-data;',
         Authorization: `Bearer ${token}`,
     }
 });

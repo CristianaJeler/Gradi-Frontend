@@ -1,14 +1,19 @@
 import React from "react";
-import {RouteComponentProps} from "react-router-dom";
-import {IonContent,IonPage} from "@ionic/react";
-import {AuthHeader} from "../../authentication/pages/design/AuthHeader";
+import {IonContent, IonItem, IonPage} from "@ionic/react";
+import {MainHeader} from "../../genericUser/components/MainHeader";
+import Footer from "../../genericUser/components/Footer";
+import {PupilMenuBar} from "./PupilMenuBar";
+import { PupilSideMenu } from "./PupilSideMenu";
 
-export const PupilHome: React.FC<RouteComponentProps>=()=>{
+export const PupilHome: React.FC=()=>{
     return(
         <IonPage>
-            <AuthHeader/>
+            {/*<MainHeader/>*/}
+                <PupilMenuBar/>
+            {/*<PupilSideMenu/>*/}
             <IonContent>
-                PAGINA DE COPILAS
+                <IonItem>PAGINA ACASA COPII & PARINTI</IonItem>
+                <Footer/>
             </IonContent>
         </IonPage>
     )

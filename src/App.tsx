@@ -1,6 +1,6 @@
 import React from 'react';
 import {Redirect, Route} from 'react-router-dom';
-import {IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs} from '@ionic/react';
+import {IonApp, IonRouterOutlet} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {AuthenticationProvider, PrivateRoute} from "./authentication"
 import Login from "./authentication/pages/Login";
@@ -27,7 +27,10 @@ import "./main.css"
 import TeacherHome from "./teachers/pages/TeacherHome";
 import PupilHome from "./pupils/pages/PupilHome";
 import {PupilsProvider} from "./pupils/provider/PupilsProvider";
-import {TeachersProvider} from "./teachers/provider/TeachersProvider";
+import {GenericUserProvider} from "./genericUser/provider/GenericUserProvider";
+import AccountSettings from "./teachers/pages/TeacherSettings";
+import Home from "./genericUser/components/Home";
+import PupilsSettings from "./pupils/pages/PupilsSettings";
 
 const App: React.FC = () => (
     <IonApp>
@@ -37,12 +40,15 @@ const App: React.FC = () => (
                     <Route path="/login" component={Login} exact={true}/>
                     <Route path={"/signup"} component={Signup} exact={true}/>
                     <Route exact path="/" render={() => <Redirect to="/login"/>}/>
-                    <TeachersProvider>
-                        <PrivateRoute component={TeacherHome} path={"/teachers/home"}/>
-                    </TeachersProvider>
-                    <PupilsProvider>
-                        <PrivateRoute component={PupilHome} path={"/pupils/home"}/>
-                    </PupilsProvider>
+                    <GenericUserProvider>
+                        <PrivateRoute component={Home} path={"/home"}/>
+                        <PrivateRoute component={TeacherHome} path={"/teachers"} exact={true}/>
+                        <PrivateRoute component={AccountSettings} path={"/teachers/settings"} exact={true}/>
+                        <PupilsProvider>
+                            <PrivateRoute component={PupilHome} path={"/pupils"}/>
+                            <PrivateRoute component={PupilsSettings} path={"/pupils/settings"}/>
+                        </PupilsProvider>
+                    </GenericUserProvider>
                 </AuthenticationProvider>
             </IonRouterOutlet>
         </IonReactRouter>

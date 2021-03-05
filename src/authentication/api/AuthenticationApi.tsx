@@ -5,7 +5,10 @@ const authURL = `http://${baseUrl}/authentication`;
 
 export interface AuthProps {
     token: string;
-    userType?:string;
+    userType:string;
+    firstName?:string;
+    lastName?:string;
+    picture?:string
 }
 
 export interface SignupProps {
@@ -15,6 +18,8 @@ export interface SignupProps {
     status: string;
     username: string;
     password: string;
+    message?:string;
+    succeeded?:boolean;
 }
 
 export const login: (username?: string, password?: string) => Promise<AuthProps> = ((username, password) => {

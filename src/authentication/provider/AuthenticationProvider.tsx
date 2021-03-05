@@ -2,11 +2,12 @@ import React, {useCallback, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {getLogger} from '../../core';
 import {login as loginApi, signup as signupApi, SignupProps} from '../api/AuthenticationApi'
+import {Storage} from "@capacitor/core";
 
 const log = getLogger('AuthenticationProvider');
 
 type LoginFunction = (username?: string, password?: string) => void;
-type LogoutFunction = (username?:string, password?:string) => void;
+type LogoutFunction = () => void;
 type SignupFunction = (user: SignupProps) => Promise<any>;
 
 export interface LoginState {
@@ -19,7 +20,7 @@ export interface LoginState {
     username?: string;
     password?: string;
     token: string;
-    userType?:string
+    userType?: string;
 }
 
 const loginInitialState: LoginState = {
@@ -31,7 +32,7 @@ const loginInitialState: LoginState = {
 }
 
 export interface SignupState {
-    isSignedup: boolean;
+    isSigned: boolean;
     pendingSignup: boolean;
     signup?: SignupFunction;
     signupError: Error | null;
@@ -39,13 +40,12 @@ export interface SignupState {
     lastName?: string;
     email?: string;
     userType?: string;
-    kindergarten?: string;
     username?: string;
     password?: string;
 }
 
 const signupInitialState: SignupState = {
-    isSignedup: false,
+    isSigned: false,
     pendingSignup: false,
     signupError: null
 }
@@ -53,7 +53,6 @@ const signupInitialState: SignupState = {
 export const LoginContext = React.createContext<LoginState>(loginInitialState);
 export const SignupContext = React.createContext<SignupState>(signupInitialState);
 
-// export const SignupContext = React.createContext<SignupState>(signupInitialState);
 
 interface AuthProviderProps {
     children: PropTypes.ReactNodeLike
@@ -63,14 +62,21 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
     ({children}) => {
         const [loginState, setLoginState] = useState(loginInitialState);
         const [signupState, setSignedUpState] = useState(signupInitialState)
-        const {isAuthenticated, isAuthenticating, authenticationError, pendingAuthentication, token, userType} = loginState;
-        const {isSignedup, pendingSignup, signupError} = signupState
-        const login = useCallback(loginCallback, []);
+        const {
+            isAuthenticated,
+            isAuthenticating,
+            authenticationError,
+            pendingAuthentication,
+            token,
+            userType
+        } = loginState;
+        const {isSigned, pendingSignup, signupError} = signupState
+        const login = useCallback(loginCallback, [loginState]);
         const signup = useCallback<SignupFunction>(signupCallback, [])
         const logout = useCallback(logoutCallback, []);
         useEffect(authenticationEffect, [pendingAuthentication]);
         const loginValue = {isAuthenticated, login, isAuthenticating, authenticationError, token, logout, userType};
-        const signupValue={isSignedup, pendingSignup, signupError, signup}
+        const signupValue = {isSigned, pendingSignup, signupError, signup}
         log('render');
 
         return (
@@ -87,22 +93,25 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
             setLoginState({
                 ...loginState,
                 pendingAuthentication: true,
+                authenticationError:null,
                 username,
                 password
             });
         }
 
-        function logoutCallback(username?: string, password?: string):
+        function logoutCallback():
             void {
             log('logout');
             setLoginState({
                 ...loginState,
                 isAuthenticated: false,
-                username:'',
-                password:''
+            });
+            setSignedUpState({
+                ...signupState,
+                isSigned:false,
             });
             (async () => {
-                await sessionStorage.clear();
+                await Storage.clear();
             })();
         }
 
@@ -114,11 +123,13 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
             }
 
             async function authenticate() {
-                let token = await sessionStorage.getItem("token")
-                if (token) {
+                let token = await Storage.get({key: "token"})
+                let userType = await Storage.get({key: "userType"})
+                if (token.value && userType.value) {
                     setLoginState({
                         ...loginState,
-                        token: token,
+                        token: token.value,
+                        userType: userType.value,
                         pendingAuthentication: false,
                         isAuthenticated: true,
                         isAuthenticating: false,
@@ -141,7 +152,10 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
                         return;
                     }
                     log('authentication succedeed');
-                    await sessionStorage.setItem("token", token)
+
+                    await Storage.set({key: "token", value: token})
+                    await Storage.set({key: "userType", value: userType})
+
                     setLoginState({
                         ...loginState,
                         token,
@@ -166,15 +180,27 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
         }
 
         async function signupCallback(user: SignupProps) {
-            try {
-                let usr = await signupApi(user.firstName, user.lastName, user.email, user.status, user.username, user.password)
-                console.log(usr)
-            } catch (error) {
+            setSignedUpState({
+                ...signupState,
+                signupError: null,
+                pendingSignup: true,
+                isSigned: false,
+            });
+            let res = await signupApi(user.firstName, user.lastName, user.email, user.status, user.username, user.password)
+            console.log(typeof(res.succeeded))
+            if (res.succeeded === false) {
                 setSignedUpState({
                     ...signupState,
-                    signupError: error,
+                    signupError: new Error(res.message),
                     pendingSignup: false,
-                    isSignedup: false,
+                    isSigned:false,
+                });
+            }else{
+                setSignedUpState({
+                    ...signupState,
+                    signupError:null,
+                    pendingSignup: false,
+                    isSigned: true,
                 });
             }
         }
