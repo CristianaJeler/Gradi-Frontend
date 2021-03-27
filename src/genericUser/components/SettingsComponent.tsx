@@ -5,8 +5,6 @@ import {
     createAnimation,
     IonAlert,
     IonButton,
-    IonFab,
-    IonFabButton,
     IonIcon,
     IonImg,
     IonInput,
@@ -14,9 +12,9 @@ import {
     IonItemDivider,
     IonItemGroup,
     IonLabel,
+    IonList,
     IonLoading,
     IonTitle,
-    IonToast
 } from "@ionic/react";
 import unknownProfile from "../../assets/img/profile.png"
 import "../design/settings.component.css"
@@ -24,8 +22,9 @@ import {CameraResultType, CameraSource} from "@capacitor/core";
 import {useCamera} from '@ionic/react-hooks/camera'; //custom hook definit de cei de la Ionic
 import {base64FromPath} from "@ionic/react-hooks/filesystem";
 import {
-    camera,
-    medical,
+    help,
+    image, lockClosed,
+    medical, pencil, person,
 } from "ionicons/icons"
 import {UserContext} from "../provider/GenericUserProvider";
 import {PICTURE_TYPE} from "../utils/pictureType";
@@ -33,8 +32,9 @@ import {LoginContext} from "../../authentication";
 
 
 export const SettingsComponent: React.FC = () => {
-    const {logout}=useContext(LoginContext)
+    const {logout} = useContext(LoginContext)
     const {getPhoto} = useCamera();
+    const [settingsType, setSettingsType]=useState("picture")
     const {
         updateProfilePic,
         updateProfileDetails,
@@ -66,7 +66,7 @@ export const SettingsComponent: React.FC = () => {
     const [newPassword, setNewPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [passState, setPassState] = useState(true)
-    const [showPasswordAlert, setShowPasswordAlert]=useState(false)
+    const [showPasswordAlert, setShowPasswordAlert] = useState(false)
 
 
     const takePhoto = async () => {
@@ -108,7 +108,7 @@ export const SettingsComponent: React.FC = () => {
         }
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         if (passwordUpdatedSuccessfully)
             logout && logout();
     }, [passwordUpdatedSuccessfully])
@@ -146,7 +146,33 @@ export const SettingsComponent: React.FC = () => {
     }
     return (
         <>
-            <IonItemGroup color={"light"} class={"settingsForm"}>
+            <IonItemGroup class={"settingsOptions"}>
+                <IonList>
+                    <IonItem class={"settingsOption"} onClick={()=>setSettingsType("picture")}>
+                        <IonLabel>Fotografia de profil</IonLabel>
+                        <IonIcon icon={image}/>
+                    </IonItem>
+                    <IonItem class={"settingsOption"}  onClick={()=>setSettingsType("personal")}>
+                        <IonLabel>
+                            Informații personale
+                        </IonLabel>
+                        <IonIcon icon={person}/>
+                    </IonItem>
+                    <IonItem class={"settingsOption"}  onClick={()=>setSettingsType("security")}>
+                        <IonLabel>
+                            Securitate
+                        </IonLabel>
+                        <IonIcon icon={lockClosed}/>
+                    </IonItem>
+                    <IonItem class={"settingsOption"}>
+                        <IonLabel>
+                            Ajutor
+                        </IonLabel>
+                        <IonIcon icon={help}/>
+                    </IonItem>
+                </IonList>
+            </IonItemGroup>
+            {settingsType==="picture" && <IonItemGroup color={"light"} class={"settingsForm"}>
                 <IonItemDivider>
                     <IonTitle>FOTOGRAFIA DE PROFIL</IonTitle>
                     <IonButton slot={"end"} color={"warning"} onClick={updatePic}>Actualizează</IonButton>
@@ -154,11 +180,9 @@ export const SettingsComponent: React.FC = () => {
                 <br/>
                 {updatedPic &&
                 <IonImg src={updatedPic} id={"profilePic"} onClick={takePhoto} title={"Editați fotografia"}/>}
-            </IonItemGroup>
-            <br/>
-            <br/>
-            <br/>
-            <IonItemGroup color={"light"} class={"settingsForm"}>
+            </IonItemGroup>}
+
+            {settingsType==="personal" && <IonItemGroup color={"light"} class={"settingsForm"}>
                 <IonItemDivider>
                     <IonTitle>INFORMAȚII PERSONALE</IonTitle>
                     <IonButton slot={"end"} color={"warning"} onClick={updateProfDetails}>Actualizează</IonButton>
@@ -212,11 +236,9 @@ export const SettingsComponent: React.FC = () => {
                         onIonChange={(e) => setUpdatedKindergarten(e.detail.value || '')}
                     />
                 </IonItem>
-            </IonItemGroup>
-            <br/>
-            <br/>
-            <br/>
-            <IonItemGroup color={"light"} class={"settingsForm"}>
+            </IonItemGroup>}
+
+            {settingsType==="security" && <IonItemGroup color={"light"} class={"settingsForm"}>
                 <IonItemDivider>
                     <IonTitle>SECURITATE</IonTitle>
                     <IonButton color={"warning"} onClick={()=>setShowPasswordAlert(true)}>Actualizează</IonButton>
@@ -248,7 +270,7 @@ export const SettingsComponent: React.FC = () => {
                     <IonInput type={"password"} id={"passwordConfirmation"} value={passwordConfirmation}
                               onIonChange={(e) => setPasswordConfirmation(e.detail.value || '')}/>
                 </IonItem>
-            </IonItemGroup>
+            </IonItemGroup>}
             {gettingAccountDetails && <IonLoading isOpen={true} message={"Se încarcă detaliile de cont!"}/>}
             {getAccountDetailsError &&
             <IonAlert isOpen={true} message={"S-a produs o eroare la obținerea detaliilor de cont!"}/>}

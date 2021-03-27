@@ -28,8 +28,7 @@ export const TeacherSideMenu: React.FC = () => {
     const {logout} = useContext(LoginContext)
     const {firstName, lastName, picture}=useContext(UserContext)
     const [menuPic, setMenuPic]=useState(defaultProfilePic);
-    // const [menuFirstName, setMenuFirstName]=useState(firstName);
-    // const [menuLastName, setMenuLastName]=useState(lastName);
+
     const handleLogout = () => {
         logout && logout()
     }

@@ -1,27 +1,24 @@
-import React, {useContext, useState} from "react";
-import {
-    IonButton, IonHeader,
+import React, { useEffect} from "react";
+import {IonHeader,
     IonIcon, IonImg,
-    IonItem, IonLabel, IonList, IonPopover,
-    IonTitle,
+    IonItem, IonLabel,
     IonToolbar
 } from "@ionic/react";
 import {
     extensionPuzzle,
-    help,
-    home,
-    logOut,
     peopleCircle,
-    settings
 } from "ionicons/icons";
-import {LoginContext} from "../../authentication";
 import "../../genericUser/design/menu.css"
 import "../../genericUser/design/general.header.css"
 import logo from "../../assets/img/favicon.png";
-import {PopoverEvent} from "../../pupils/pages/PupilMenuBar";
 import {SettingsPopover} from "../../genericUser/components/SettingsPopover";
 
 export const TeacherMenuBar: React.FC = () => {
+    useEffect(() => {
+        return () => {
+            console.log("Unmounted TeacherMenuBar component");
+        };
+    }, []);
     return (
         <>
             <IonHeader>

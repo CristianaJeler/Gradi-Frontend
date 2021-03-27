@@ -1,21 +1,13 @@
 import React, {useContext, useState} from "react";
 import {
-    IonButton, IonHeader,
+    IonHeader,
     IonIcon, IonImg,
     IonItem, IonLabel,
-    IonList,
-    IonPopover,
-    IonTitle,
     IonToolbar,
 } from "@ionic/react";
 import {
-    help,
-    home,
-    logOut,
     peopleCircle,
-    settings
 } from "ionicons/icons";
-import {LoginContext} from "../../authentication";
 import "../../genericUser/design/menu.css"
 import "../../genericUser/design/general.header.css"
 import logo from "../../assets/img/favicon.png";

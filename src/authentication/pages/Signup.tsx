@@ -50,8 +50,6 @@ export const Signup: React.FC<RouteComponentProps>=({history})=>{
         else{
             setPassState(true);
             signup && signup({firstName: firstName||'',lastName:lastName || '',email:email ||'',status:status||'',username:username||'',password:password||''})
-            // if(isSigned && signupError===null)  history.push("/login")
-            // else console.log(isSigned + " "+signupError)
         }
 
     };

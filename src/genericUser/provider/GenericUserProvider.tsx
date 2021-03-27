@@ -98,7 +98,6 @@ const reducer: (state: UserState, action: ActionProperties) => UserState =
                     passwordUpdatedSuccessfully:false
                 };
             case GET_ACCOUNT_DETAILS_SUCCEEDED:
-                console.log("DISPATCH SUCCES DETALII")
                 return {
                     ...state,
                     username: payload.details.username,

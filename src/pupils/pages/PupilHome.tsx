@@ -1,9 +1,8 @@
 import React from "react";
-import {IonContent, IonItem, IonPage} from "@ionic/react";
-import {MainHeader} from "../../genericUser/components/MainHeader";
+import {IonContent,  IonPage} from "@ionic/react";
 import Footer from "../../genericUser/components/Footer";
 import {PupilMenuBar} from "./PupilMenuBar";
-import { PupilSideMenu } from "./PupilSideMenu";
+import {HomeComponent} from "../../genericUser/components/HomeComponent";
 
 export const PupilHome: React.FC=()=>{
     return(
@@ -12,7 +11,7 @@ export const PupilHome: React.FC=()=>{
                 <PupilMenuBar/>
             {/*<PupilSideMenu/>*/}
             <IonContent>
-                <IonItem>PAGINA ACASA COPII & PARINTI</IonItem>
+                <HomeComponent/>
                 <Footer/>
             </IonContent>
         </IonPage>

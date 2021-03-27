@@ -3,7 +3,9 @@
     height: 150px;
     margin-right: auto;
     margin-left: auto;
-    border-radius: 50%;
+    border-radius: 100%;
+    position:relative;
+    z-index:1;
     overflow: hidden;
     border-style: double;
     border-color: #d69c09;
@@ -33,7 +35,7 @@
 .menuButton:hover{
     cursor: pointer;
     --ion-background-color: rgb(252, 247, 231);
-
+    border-radius: 30%;
 }
 
 #myMenu {
@@ -59,6 +61,9 @@
 
 #menuPhotoAndNameCard {
     --ion-background-color: #fcf7ee;
+    border-style: double;
+    border-color: #d69c09;
+    /*border-radius: 50%;*/
 }
 
 .menuIcon {
@@ -68,4 +73,7 @@
 .popoverItem:hover{
     --ion-background-color: rgb(252, 247, 231);
     cursor: pointer;
+}
+#userPopover{
+    --ion-background-color: #f6eed4;
 }

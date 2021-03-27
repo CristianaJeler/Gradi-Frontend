@@ -4,8 +4,7 @@ import {
     IonContent,
     IonPage
 } from "@ionic/react";
-import {MainHeader} from "../../genericUser/components/MainHeader";
-import {TeacherSideMenu} from "./TeacherSideMenu";
+
 import "../../genericUser/design/settings.component.css"
 import Footer from "../../genericUser/components/Footer";
 import { SettingsComponent } from "../../genericUser/components/SettingsComponent";

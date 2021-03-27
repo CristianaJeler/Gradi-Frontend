@@ -7,7 +7,7 @@ export const AuthHeader: React.FC = () => {
         <>
             <IonHeader>
                 <IonToolbar id={"header"}>
-                <IonImg id={"img"} src={logo}/>
+                <IonImg id={"img"} src={logo} onClick={()=>window.location.href="/home"}/>
                 </IonToolbar>
             </IonHeader>
         </>

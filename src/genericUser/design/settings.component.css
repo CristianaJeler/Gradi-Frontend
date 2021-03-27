@@ -4,18 +4,40 @@
     margin-right: auto;
     margin-left: auto;
     border-radius: 50%;
-    border-style: double;border-color: #d69c09;
+    border-style: double;
+    border-color: #d69c09;
     overflow: hidden;
     background-color: #fcf7ee;
 }
 #profilePic:hover{
-    opacity: 50%;
+    opacity: 40%;
     cursor: pointer;
 }
+#profilePic:hover > .pencil {
+    display: inline;
+}
+
+.pencil{
+    background-image: url("pencil.png");
+}
 .settingsForm{
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 90%;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    width: 70%;
+    float: right;
+    display: inline-block;
+    height: calc(100% - 65px);
+}
+.settingsOptions{
+    width: 25%;
+    display: inline-block;
+    float: left;
+
+}
+.settingsOption:hover{
+    --ion-background-color: rgb(252, 247, 231);
+    cursor: pointer;
+    color: #c8920b;
 }
 
 .settingsInput{

@@ -21,7 +21,6 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
-import {logInOutline, personAddOutline} from "ionicons/icons";
 import Signup from "./authentication/pages/Signup";
 import "./main.css"
 import TeacherHome from "./teachers/pages/TeacherHome";
@@ -31,6 +30,10 @@ import {GenericUserProvider} from "./genericUser/provider/GenericUserProvider";
 import AccountSettings from "./teachers/pages/TeacherSettings";
 import Home from "./genericUser/components/Home";
 import PupilsSettings from "./pupils/pages/PupilsSettings";
+import {TeachersProvider} from "./teachers/provider/TeachersProvider";
+import Game1 from "./games/firstGame/Game1";
+import TeachersGroups from "./teachers/pages/TeachersGroups";
+import {GroupsProvider} from "./groups/provider/GroupsProvider";
 
 const App: React.FC = () => (
     <IonApp>
@@ -39,16 +42,23 @@ const App: React.FC = () => (
                 <AuthenticationProvider>
                     <Route path="/login" component={Login} exact={true}/>
                     <Route path={"/signup"} component={Signup} exact={true}/>
-                    <Route exact path="/" render={() => <Redirect to="/login"/>}/>
+                    <Route exact path="/" render={() => <Redirect to="/home"/>}/>
+                    <Route component={Home} path={"/home"}/>
+
                     <GenericUserProvider>
-                        <PrivateRoute component={Home} path={"/home"}/>
-                        <PrivateRoute component={TeacherHome} path={"/teachers"} exact={true}/>
-                        <PrivateRoute component={AccountSettings} path={"/teachers/settings"} exact={true}/>
+                        <TeachersProvider>
+                            <PrivateRoute component={TeacherHome} path={"/teachers"} exact={true}/>
+                            <PrivateRoute component={AccountSettings} path={"/teachers/settings"} exact={true}/>
+                        </TeachersProvider>
+                        <GroupsProvider>
+                            <PrivateRoute component={TeachersGroups} path={"/teachers/groups"} exact={true}/>
+                        </GroupsProvider>
                         <PupilsProvider>
                             <PrivateRoute component={PupilHome} path={"/pupils"}/>
                             <PrivateRoute component={PupilsSettings} path={"/pupils/settings"}/>
                         </PupilsProvider>
                     </GenericUserProvider>
+                    <Route component={Game1} path={"/teachers/activity1"}/>
                 </AuthenticationProvider>
             </IonRouterOutlet>
         </IonReactRouter>
