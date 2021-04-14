@@ -1,0 +1,131 @@
+.renderingOption{
+    width: 100%;
+    --background: transparent;
+}
+.renderingOption:hover{
+    cursor: pointer;
+    color: #6d4e04;
+    --background: #f3e9d7;
+    --ion-color-base: black;
+}
+
+.renderingOption:hover .renderingOptionIcon{
+    color: #d69c09;
+}
+#renderingOptionsList{
+    display: inline-block;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.title{
+    font-size: xx-large;
+    max-height: 100px;
+    border-bottom: solid #d67309 2px;
+    color: #d67309;
+    text-align: center;
+}
+
+.renderedComponent{
+    display: inline-block;
+    align-content: center;
+    width: 70%;
+    max-width: 70%;
+    min-width: 70%;
+    float: right;
+    border-left: solid #674602 1px;
+    height: 100%;
+    --ion-background-color: #ffe07f;
+    box-shadow: 0 0 10px 0 #a47d02;
+}
+
+#searchbar{
+    --ion-background-color: #ffffff !important;
+    opacity: 60% !important;
+}
+
+.memberProfile{
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 6vw;
+    height: 6vw;
+}
+
+
+.searchedMember .memberIconDelete:hover{
+    color: rgb(238, 29, 29);
+    cursor: pointer;
+}
+.searchedMember .memberIconAdd:hover{
+    color: rgb(88, 181, 66);
+    cursor: pointer;
+}
+.searchedMember{
+    padding: 1%;
+    --background: rgba(255, 255, 255, 0.6);
+    border-radius: 20% 20% 20% 20%;
+}
+
+.alert{
+    --ion-background-color: #f5f1da;
+}
+.alertBtn{
+   color: #775902 !important;
+}
+
+.memberIconDelete{
+    color: #731e1e;
+}
+.memberIconAdd{
+    color: #164713;
+}
+
+#datePicker{
+    color: #5a4838;
+}
+#searchMemberTitle{
+    margin: auto;
+    max-width: 40%;
+}
+
+.newActivityItems{
+    --ion-background-color: rgba(255, 255, 255, 0.58);
+    max-width: 90%;
+    margin: auto;
+}
+.picker-toolbar-cancel,.picker-toolbar-button {
+    width: 50%;
+}
+.picker-button.ion-activatable.sc-ion-picker-md{
+    color: #ef7c7c;
+    font-size: large;
+    margin-left: 30%;
+}
+.picker-button.ion-activatable.sc-ion-picker-md:hover{
+    color: #bf2e2e;
+}
+.datePicker *{
+    background: rgb(232, 241, 178);
+}
+.datePicker{
+ color: #2d806f;
+}
+.picker-opt.picker-opt-selected{
+    color: #014931;
+}
+.addActivityComponentBtn{
+    color: #053d68;
+}
+.addActivityComponentIcon {
+    color: #053d68 !important;
+}
+.addActivityComponentBtn:hover,.addActivityComponentBtn:hover .addActivityComponentIcon{
+    color: #6dbbc8 !important;
+    cursor: pointer;
+}
+#btnSendActivity{
+    --background: #f8c876;
+    height: 80%;
+    color: #4e2400;
+    font-size: larger;
+}

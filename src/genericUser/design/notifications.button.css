@@ -1,0 +1,20 @@
+#notificationBadge {
+    position: absolute;
+    border-radius: 100%;
+}
+
+
+#notificationsIcon{
+    color: #d69c09;
+    font-size: x-large;
+}
+
+#notificationsButton{
+    margin-right: 1%;
+}
+#notificationsButton:hover{
+    cursor: pointer;
+}
+#notificationsButton:hover #notificationsIcon{
+    color: #584210;
+}

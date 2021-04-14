@@ -12,6 +12,7 @@ import "../../genericUser/design/menu.css"
 import "../../genericUser/design/general.header.css"
 import logo from "../../assets/img/favicon.png";
 import {SettingsPopover} from "../../genericUser/components/SettingsPopover";
+import {NotificationsPopover} from "../../genericUser/components/NotificationsPopover";
 
 export const TeacherMenuBar: React.FC = () => {
     useEffect(() => {
@@ -30,6 +31,7 @@ export const TeacherMenuBar: React.FC = () => {
                     <IonItem class={"menuButton"} lines={"none"} >
                         <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"}/> Activități</IonLabel>
                     </IonItem>
+                    <NotificationsPopover/>
                     <SettingsPopover userType={"teachers"}/>
                 </IonToolbar>
             </IonHeader>

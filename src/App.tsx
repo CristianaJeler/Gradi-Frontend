@@ -4,7 +4,6 @@ import {IonApp, IonRouterOutlet} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import {AuthenticationProvider, PrivateRoute} from "./authentication"
 import Login from "./authentication/pages/Login";
-// import "./theme/variables.css"
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,6 +33,8 @@ import {TeachersProvider} from "./teachers/provider/TeachersProvider";
 import Game1 from "./games/firstGame/Game1";
 import TeachersGroups from "./teachers/pages/TeachersGroups";
 import {GroupsProvider} from "./groups/provider/GroupsProvider";
+import PupilsGroups from "./pupils/pages/PupilsGroups";
+import {TeacherSpecificGroup} from "./teachers/pages/TeacherSpecificGroup";
 
 const App: React.FC = () => (
     <IonApp>
@@ -52,10 +53,12 @@ const App: React.FC = () => (
                         </TeachersProvider>
                         <GroupsProvider>
                             <PrivateRoute component={TeachersGroups} path={"/teachers/groups"} exact={true}/>
+                            <PrivateRoute component={TeacherSpecificGroup} path={"/teachers/groups/:id"} exact={true}/>
+                            <PrivateRoute component={PupilsGroups} path={"/pupils/groups"} exact={true}/>
                         </GroupsProvider>
                         <PupilsProvider>
-                            <PrivateRoute component={PupilHome} path={"/pupils"}/>
-                            <PrivateRoute component={PupilsSettings} path={"/pupils/settings"}/>
+                            <PrivateRoute component={PupilHome} path={"/pupils"} exact={true}/>
+                            <PrivateRoute component={PupilsSettings} path={"/pupils/settings"} exact={true}/>
                         </PupilsProvider>
                     </GenericUserProvider>
                     <Route component={Game1} path={"/teachers/activity1"}/>

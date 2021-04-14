@@ -1,0 +1,30 @@
+.groupCard{
+    height: 30%;
+    width: 15%;
+    max-height: 30%;
+    max-width: 20%;
+    display: inline-block;
+    background-color: #ecf6c9;
+    text-align: center;
+}
+.groupImg{
+    margin-right: auto;
+    margin-left: auto;
+    border-style: double;
+    border-color: #d69c09;
+}
+
+.groupCard:hover{
+    cursor: pointer;
+    background-color: #efeabc;
+}
+#pageContent {
+    height: 100%;
+    margin:auto;
+}
+#groupsTitle{
+    width: 50%;
+    display: inline-block;
+    font-size: xxx-large;
+    color: #ec6733;
+}

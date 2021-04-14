@@ -12,6 +12,7 @@ import "../../genericUser/design/menu.css"
 import "../../genericUser/design/general.header.css"
 import logo from "../../assets/img/favicon.png";
 import {SettingsPopover} from "../../genericUser/components/SettingsPopover";
+import {NotificationsPopover} from "../../genericUser/components/NotificationsPopover";
 export interface PopoverEvent{
     show:boolean,
     event:Event|undefined
@@ -25,6 +26,7 @@ export const PupilMenuBar: React.FC = () => {
                     <IonItem class={"menuButton"} lines={"none"} routerLink={"/pupils/groups"}>
                         <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"}/> Grupele mele</IonLabel>
                     </IonItem>
+                    <NotificationsPopover/>
                     <SettingsPopover userType={"pupils"}/>
                 </IonToolbar>
             </IonHeader>

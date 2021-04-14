@@ -4,6 +4,7 @@ import {
     CreateAnimation,
     createAnimation,
     IonAlert,
+    IonAvatar,
     IonButton,
     IonIcon,
     IonImg,
@@ -179,7 +180,9 @@ export const SettingsComponent: React.FC = () => {
                 </IonItemDivider>
                 <br/>
                 {updatedPic &&
-                <IonImg src={updatedPic} id={"profilePic"} onClick={takePhoto} title={"Editați fotografia"}/>}
+                <IonAvatar id={"profilePic"} onClick={takePhoto} title={"Editați fotografia"}>
+                    <img src={updatedPic} alt={"Fotografia de profil"}/>
+                </IonAvatar>}
             </IonItemGroup>}
 
             {settingsType==="personal" && <IonItemGroup color={"light"} class={"settingsForm"}>

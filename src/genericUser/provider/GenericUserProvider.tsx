@@ -5,13 +5,20 @@ import {
     updateProfilePic as updateProfilePicAPI,
     getProfileDetails,
     updateProfileDetails as updateProfileDetailsAPI,
-    updatePassword as updatePasswordAPI
+    updatePassword as updatePasswordAPI,
+    searchUsers as searchUsersAPI,
+    addMemberToGroup as addMemberToGroupAPI,
+    deleteMemberFromGroup as deleteMemberFromGroupAPI,
 } from "../api/GenericUserApi"
+import {GroupContext} from "../../groups/provider/GroupsProvider";
 
 
 type UpdateProfilePicFunction = (picture?: string) => Promise<any>;
 type UpdateProfileDetailsFunction = (details?: UserProps) => Promise<any>;
 type UpdatePasswordFunction = (oldPswd?: string, newPswd?: string) => Promise<any>;
+type SearchUsersFunction = (searchCriteria?: string, groupID?: string, page?: number, size?: number) => void;
+type AddMemberToGroupFunction=(id:string, groupId:string)=>Promise<any>
+type DeleteMemberFromGroupFunction=(id:string, groupId:string)=>Promise<any>
 
 export interface UserProps {
     username?: string,
@@ -23,6 +30,15 @@ export interface UserProps {
     phone?: string
     status?: string
     description?: string
+}
+
+export interface SearchedUserProps {
+    username?: string;
+    firstName?: string;
+    lastName?: string;
+    inGroup?: boolean;
+    img?: string;
+    id?: string;
 }
 
 export interface UserState {
@@ -46,6 +62,12 @@ export interface UserState {
     updateProfilePic?: UpdateProfilePicFunction,
     updateProfileDetails?: UpdateProfileDetailsFunction,
     updatePassword?: UpdatePasswordFunction,
+    searchedUsers: SearchedUserProps[];
+    searchUsers?: SearchUsersFunction;
+    searchingUsers: boolean,
+    searchUsersError: Error | null;
+    addMemberToGroup?:AddMemberToGroupFunction;
+    deleteMemberFromGroup?:DeleteMemberFromGroupFunction;
 }
 
 const initialState: UserState = {
@@ -57,7 +79,10 @@ const initialState: UserState = {
     updatingProfilePicture: false,
     updatingPassword: false,
     passwordUpdateError: null,
-    passwordUpdatedSuccessfully: false
+    passwordUpdatedSuccessfully: false,
+    searchingUsers: false,
+    searchUsersError: null,
+    searchedUsers: [],
 }
 
 export const UserContext = React.createContext<UserState>(initialState);
@@ -87,6 +112,19 @@ const PASSWORD_UPDATE_SUCCEEDED = 'PASSWORD_UPDATE_SUCCEEDED'
 const PASSWORD_UPDATE_FAILED = 'PASSWORD_UPDATE_FAILED'
 const PASSWORD_UPDATE_STARTED = 'PASSWORD_UPDATE_STARTED'
 
+const SEARCHING_USERS_SUCCEEDED = 'SEARCHING_USERS_SUCCEEDED'
+const SEARCHING_USERS_FAILED = 'SEARCHING_USERS_FAILED'
+const SEARCHING_USERS_STARTED = 'SEARCHING_USERS_STARTED'
+
+
+const ADD_MEMBER_STARTED="ADD_MEMBER_STARTED"
+const ADD_MEMBER_SUCCEEDED="ADD_MEMBER_SUCCEEDED"
+const ADD_MEMBER_FAILED="ADD_MEMBER_FAILED"
+
+const DELETE_MEMBER_STARTED="DELETE_MEMBER_STARTED"
+const DELETE_MEMBER_SUCCEEDED="DELETE_MEMBER_SUCCEEDED"
+const DELETE_MEMBER_FAILED="DELETE_MEMBER_FAILED"
+
 const reducer: (state: UserState, action: ActionProperties) => UserState =
     (state, {type, payload}) => {
         switch (type) {
@@ -95,7 +133,7 @@ const reducer: (state: UserState, action: ActionProperties) => UserState =
                     ...state,
                     gettingAccountDetails: true,
                     fetchingError: null,
-                    passwordUpdatedSuccessfully:false
+                    passwordUpdatedSuccessfully: false
                 };
             case GET_ACCOUNT_DETAILS_SUCCEEDED:
                 return {
@@ -144,6 +182,53 @@ const reducer: (state: UserState, action: ActionProperties) => UserState =
                     passwordUpdateError: payload.error,
                     passwordUpdatedSuccessfully: false
                 }
+            case SEARCHING_USERS_STARTED:
+                return {...state, searchUsersError: null, searchingUsers: true}
+            case SEARCHING_USERS_FAILED:
+                return {...state, searchUsersError: payload.error, searchingUsers: false}
+            case SEARCHING_USERS_SUCCEEDED:
+                if (payload.page > 0 && state.searchedUsers) {
+                    let users = [...state.searchedUsers]
+                    for (let u of payload.searchResult)
+                        users.push(u)
+                    return {
+                        ...state,
+                        searchedUsers: users,
+                        searchUsersError: null,
+                        searchingUsers: false
+                    }
+                } else
+                    return {
+                        ...state,
+                        searchedUsers: payload.searchResult,
+                        searchUsersError: null,
+                        searchingUsers: false
+                    }
+            case ADD_MEMBER_SUCCEEDED:
+                let users = [...state.searchedUsers];
+                let addedUserIndex=users.findIndex(u=>u.id===payload.id);
+                let addedUserEntity=users.find(u=>u.id===payload.id);
+                if(addedUserEntity) {
+                    console.log(addedUserEntity)
+                    addedUserEntity.inGroup=!addedUserEntity.inGroup;
+                    users.splice(addedUserIndex,1,addedUserEntity)
+                }
+                return {
+                    ...state,
+                    searchedUsers: users,
+                }
+            case DELETE_MEMBER_SUCCEEDED:
+                let allUsers = [...state.searchedUsers];
+                let deletedUserIndex=allUsers.findIndex(u=>u.id===payload.id);
+                let deletedUserEntity=allUsers.find(u=>u.id===payload.id);
+                if(deletedUserEntity) {
+                    deletedUserEntity.inGroup=!deletedUserEntity.inGroup;
+                    allUsers.splice(deletedUserIndex,1,deletedUserEntity)
+                }
+                return {
+                    ...state,
+                    searchedUsers: allUsers,
+                }
             default:
                 return state;
         }
@@ -156,6 +241,9 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
     const updateProfileDetails = useCallback<UpdateProfileDetailsFunction>(updateProfileDetailsCallback, [token])
     const updatePassword = useCallback<UpdatePasswordFunction>(updatePasswordCallback, [token])
     const [state, dispatch] = useReducer(reducer, initialState);
+    const searchUsers = useCallback<SearchUsersFunction>(searchUsersCallback, [token]);
+    const addMemberToGroup=useCallback<AddMemberToGroupFunction>(addMemberToGroupCallback,[token])
+    const deleteMemberFromGroup=useCallback<DeleteMemberFromGroupFunction>(deleteMemberFromGroupCallback,[token])
     const {
         updatingProfileDetails,
         passwordUpdatedSuccessfully,
@@ -172,7 +260,10 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
         firstName,
         kindergarten,
         picture,
-        email
+        email,
+        searchedUsers,
+        searchingUsers,
+        searchUsersError,
     } = state;
 
 
@@ -195,13 +286,70 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
                 if (!canceled) {
                     dispatch({type: GET_ACCOUNT_DETAILS_SUCCEEDED, payload: {details}});
                 }
-
             } catch (error) {
                 dispatch({type: GET_ACCOUNT_DETAILS_FAILED, payload: {error}});
             }
 
         }
     }, [token])
+
+    function searchUsersCallback(searchCriteria?: string, groupID?: string, page?: number, size?: number) {
+        let canceled = false;
+        searchUsers();
+        return () => {
+            canceled = true;
+        }
+
+        async function searchUsers() {
+            if (!token?.trim()) {
+                return;
+            }
+            try {
+                dispatch({type: SEARCHING_USERS_STARTED});
+                if (searchCriteria && searchCriteria?.length > 0) {
+                    const searchResult = await searchUsersAPI(searchCriteria, groupID, page, size, token);
+                    if (!canceled)
+                        if (searchResult.length > 0) {
+                            dispatch({type: SEARCHING_USERS_SUCCEEDED, payload: {searchResult, page}});
+                        }
+                } else {
+                    dispatch({type: SEARCHING_USERS_SUCCEEDED, payload: {searchResult: [], page}});
+                }
+
+            } catch (error) {
+                dispatch({type: SEARCHING_USERS_FAILED, payload: {error}});
+            }
+
+        }
+    }
+
+    async function addMemberToGroupCallback(memberId:string, groupId:string){
+        if(!token.trim()){
+            return
+        }else{
+            dispatch({type:ADD_MEMBER_STARTED})
+            try{
+                await addMemberToGroupAPI(token,groupId, memberId)
+                dispatch({type:ADD_MEMBER_SUCCEEDED, payload:{id: memberId}})
+            }catch (error){
+                dispatch({type:ADD_MEMBER_FAILED, payload:{error}})
+            }
+        }
+    }
+
+    async function deleteMemberFromGroupCallback(memberId:string, groupId:string){
+        if(!token.trim()){
+            return
+        }else{
+            dispatch({type:DELETE_MEMBER_STARTED})
+            try{
+                await deleteMemberFromGroupAPI(token,groupId, memberId)
+                dispatch({type:DELETE_MEMBER_SUCCEEDED, payload:{id: memberId}})
+            }catch (error){
+                dispatch({type:DELETE_MEMBER_FAILED, payload:{error}})
+            }
+        }
+    }
 
     return (
         <UserContext.Provider value={{
@@ -223,7 +371,13 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
             firstName,
             kindergarten,
             picture,
-            email
+            email,
+            searchedUsers,
+            searchUsers,
+            searchingUsers,
+            searchUsersError,
+            deleteMemberFromGroup,
+            addMemberToGroup
         }}>
             {children}
         </UserContext.Provider>
@@ -258,6 +412,5 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
         } else {
             dispatch({type: PASSWORD_UPDATE_FAILED, payload: {error: new Error(updated.message)}})
         }
-
     }
 }

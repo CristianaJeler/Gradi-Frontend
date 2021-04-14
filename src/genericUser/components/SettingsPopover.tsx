@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from "react";
-import {IonImg, IonIcon, IonPopover, IonList, IonItem, IonLabel, IonCardSubtitle, IonCard
+import {IonImg, IonIcon, IonPopover, IonList, IonItem, IonLabel, IonCardSubtitle, IonCard, IonAvatar
 } from "@ionic/react";
 import "../design/general.header.css"
-import {help, logOut, settings} from "ionicons/icons";
+import {logOut, settings} from "ionicons/icons";
 import {LoginContext} from "../../authentication";
 import {PopoverEvent} from "../../pupils/pages/PupilMenuBar";
 import {UserContext} from "../provider/GenericUserProvider";
@@ -13,8 +13,6 @@ export const SettingsPopover: React.FC<{userType:string}> = (usertype) => {
     const [showPopover, setShowPopover] = useState<PopoverEvent>({show:false,event:undefined})
     const {firstName, lastName, picture}=useContext(UserContext)
     const [menuPic, setMenuPic]=useState(defaultProfilePic);
-    // const [canceled, setCanceled]=useState(false);
-    // useEffect(()=>{},[canceled])
     useEffect(()=>{
         if(picture)
             if(picture.startsWith(PICTURE_TYPE)) setMenuPic(picture)
@@ -29,20 +27,16 @@ export const SettingsPopover: React.FC<{userType:string}> = (usertype) => {
 
     return (
         <>
-            <IonItem id={"settingsButton"} slot={"end"} lines={"none"}>
+            <div id={"settingsButton"} slot={"end"}>
                 <IonIcon slot="start" icon={settings} id={"settingsIcon"} onClick={(event) => setShowPopover({show:true,event:event.nativeEvent})}>
                     <IonPopover isOpen={showPopover.show} animated={true} onDidDismiss={() => setShowPopover({show:false,event:undefined})} event={showPopover.event} id={"userPopover"}>
                         <IonCard id={"menuPhotoAndNameCard"}>
                             <br/>
-                            {menuPic && <IonImg alt={"Profile picture"} id={"user_img"} src={menuPic}/>}
+                            {menuPic && <IonAvatar id={"user_img"}><img  src={menuPic} alt={"Profile picture"}/></IonAvatar>}
                             {firstName && lastName && <IonCardSubtitle id={"profileMail"}>{firstName} {lastName}</IonCardSubtitle>}
                             <br/>
                         </IonCard>
                         <IonList>
-                            {/*<IonItem lines={"none"} routerLink={"/"+usertype.userType+"/help"} class={"popoverItem"}>*/}
-                            {/*    <IonLabel><IonIcon slot="start" icon={help}*/}
-                            {/*                       class={"menuIcon"}/>Ajutor</IonLabel>*/}
-                            {/*</IonItem>*/}
                             <IonItem lines={"none"} routerLink={"/"+usertype.userType+"/settings"} class={"popoverItem"}>
                                 <IonLabel><IonIcon slot="start" icon={settings} class={"menuIcon"}/> Setări și
                                     confidențialitate</IonLabel>
@@ -54,7 +48,7 @@ export const SettingsPopover: React.FC<{userType:string}> = (usertype) => {
                         </IonList>
                     </IonPopover>
                 </IonIcon>
-            </IonItem>
+            </div>
         </>
     )
 };

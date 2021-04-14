@@ -1,18 +1,16 @@
 #user_img {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
     margin-right: auto;
     margin-left: auto;
-    border-radius: 100%;
-    position:relative;
-    z-index:1;
-    overflow: hidden;
-    border-style: double;
-    border-color: #d69c09;
 }
 
 #settingsButton:hover{
     cursor: pointer;
+}
+#settingsButton{
+    font-size: x-large;
+    margin-right: 1%;
 }
 #settingsIcon:hover{
     color: #584210;
@@ -30,6 +28,7 @@
     height: 100%;
     text-align: center;
     color: #051d5a;
+    margin-top: 0.5%;
 }
 
 .menuButton:hover{

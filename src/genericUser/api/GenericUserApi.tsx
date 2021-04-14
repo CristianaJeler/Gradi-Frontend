@@ -1,6 +1,6 @@
 import axios from "axios";
 import {authorizationConfig, baseUrl, withLogs} from '../../core';
-import {UserProps} from "../provider/GenericUserProvider"
+import {SearchedUserProps, UserProps} from "../provider/GenericUserProvider"
 
 const usersURL = `http://${baseUrl}/users`;
 
@@ -26,6 +26,20 @@ export const updateProfileDetails:(details?:UserProps, token?:string)=>Promise<U
 
 export const updatePassword:(oldPassword?:string, newPassword?:string, token?:string)=>Promise<ApiResponse>=((oldPassword,newPassword, token)=>{
     let response = axios.put(usersURL+"/pass", {oldPassword, newPassword}, authorizationConfig(token));
-    response.then(r=>console.log(r.data))
     return withLogs(response, 'updatePassword')
+})
+
+export const searchUsers:(searchCriteria?:string, groupID?:string, page?:number, size?:number, token?:string)=>Promise<SearchedUserProps[]>=((searchCriteria, groupID, page, size, token)=>{
+    let response = axios.get(usersURL+"/"+searchCriteria+"/"+groupID+"/"+page+"&"+size,  authorizationConfig(token));
+    return withLogs(response, 'searchUsers')
+})
+
+export const addMemberToGroup:(token?:string, groupID?:string, memberID?:string)=>Promise<any>=((token, groupID, memberID)=>{
+    let response = axios.put(usersURL+"/"+memberID+"/"+groupID,{}, authorizationConfig(token));
+    return withLogs(response, 'getGroupDetails')
+})
+
+export const deleteMemberFromGroup:(token?:string, groupID?:string, memberID?:string)=>Promise<any>=((token, groupID, memberID)=>{
+    let response = axios.delete(usersURL+"/"+memberID+"/"+groupID, authorizationConfig(token));
+    return withLogs(response, 'getGroupDetails')
 })

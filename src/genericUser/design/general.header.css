@@ -1,8 +1,9 @@
 #img{
-    width: 5%;
-    height: 5%;
+    width: 50px;
+    height: 50px;
     float: left;
     display: inline-block;
+    margin-top: 0.5%;
 }
 
 #logoutBtn:hover{
@@ -16,11 +17,4 @@
 
 #header{
     --ion-background-color: #faf3db;
-}
-
-#logoName{
-    font-family: "Comic Sans MS";
-}
-*{
-    vertical-align: center;
 }

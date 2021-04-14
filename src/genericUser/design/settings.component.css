@@ -1,28 +1,17 @@
 #profilePic{
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     margin-right: auto;
     margin-left: auto;
-    border-radius: 50%;
     border-style: double;
     border-color: #d69c09;
-    overflow: hidden;
-    background-color: #fcf7ee;
 }
 #profilePic:hover{
     opacity: 40%;
     cursor: pointer;
 }
-#profilePic:hover > .pencil {
-    display: inline;
-}
 
-.pencil{
-    background-image: url("pencil.png");
-}
 .settingsForm{
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
     width: 70%;
     float: right;
     display: inline-block;

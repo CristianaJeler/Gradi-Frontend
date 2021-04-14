@@ -1,22 +1,28 @@
 import React, {useCallback, useContext, useEffect, useReducer, useState} from 'react';
 import PropTypes from 'prop-types';
 import {LoginContext} from "../../authentication";
-import {getGroups as getGroupsApi, addGroup as addGroupApi} from "../api/GroupsApi";
+import {getGroups as getGroupsApi, addGroup as addGroupApi, getGroupDetails as getGroupDetailsApi} from "../api/GroupsApi";
+import {getLogger} from "../../core";
+import {newWebSocket} from "../../core/websockets";
 
 export interface GroupProperties{
     id?:string;
     name:string;
-    membersNo:number;
     img?:string;
 }
 
 export interface GroupsState {
     groups?:GroupProperties[];
-    fetchingGroupsList:boolean;
     fetchingGroupsListError:Error|null;
+    getGroupDetailsError:Error|null;
+    fetchingGroupsList:boolean;
     addingGroup:boolean;
+    gettingGroupDetails:boolean;
     addingGroupError:Error|null;
-    addNewGroup?:AddNewGroupFunction
+    addNewGroup?:AddNewGroupFunction;
+    getGroupDetails?:GetGroupDetailsFunction;
+    fetchGroups?:FetchGroupsFunction;
+    currentGroup:GroupProperties | null;
 }
 
 const initialState: GroupsState = {
@@ -24,6 +30,9 @@ const initialState: GroupsState = {
     fetchingGroupsListError:null,
     addingGroup:false,
     addingGroupError:null,
+    gettingGroupDetails:false,
+    getGroupDetailsError:null,
+    currentGroup:null
 }
 
 export const GroupContext = React.createContext<GroupsState>(initialState);
@@ -39,6 +48,9 @@ interface ActionProperties {
 }
 
 type AddNewGroupFunction = (name?:string, img?:string) => Promise<any>;
+type GetGroupDetailsFunction = (groupId?:string) => void;
+type FetchGroupsFunction = () => void;
+
 
 
 const GETTING_USERS_GROUPS_STARTED = 'GETTING_USERS_GROUPS_STARTED'
@@ -48,6 +60,11 @@ const GETTING_USERS_GROUPS_SUCCEEDED = 'GETTING_USERS_GROUPS_SUCCEEDED'
 const ADD_GROUP_STARTED = 'ADD_GROUP_STARTED'
 const ADD_GROUP_FAILED = 'ADD_GROUP_FAILED'
 const ADD_GROUP_SUCCEEDED = 'ADD_GROUP_SUCCEEDED'
+
+const GETTING_GROUP_DETAILS_STARTED = 'GETTING_GROUP_DETAILS_STARTED'
+const GETTING_GROUP_DETAILS_FAILED = 'GETTING_GROUP_DETAILS_FAILED'
+const GETTING_GROUP_DETAILS_SUCCEEDED = 'GETTING_GROUP_DETAILS_SUCCEEDED'
+
 
 const reducer: (state: GroupsState, action: ActionProperties) => GroupsState =
     (state, {type, payload}) => {
@@ -66,20 +83,51 @@ const reducer: (state: GroupsState, action: ActionProperties) => GroupsState =
                 let groupsList=[...(state.groups || [])]
                 groupsList.push(payload.group)
                 return {...state, addingGroup:false, addingGroupError:null, groups:groupsList}
+            case GETTING_GROUP_DETAILS_STARTED:
+                return {...state, getGroupDetailsError:null, gettingGroupDetails:false, currentGroup:null}
+            case GETTING_GROUP_DETAILS_SUCCEEDED:
+                return {...state, getGroupDetailsError:null,gettingGroupDetails:false, currentGroup:payload.group}
+            case GETTING_GROUP_DETAILS_FAILED:
+                return {...state, getGroupDetailsError:payload.error, gettingGroupDetails:false, currentGroup:null}
             default:
                 return state;
         }
     };
 
+
+const log=getLogger("GroupProvider")
+
 export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const{fetchingGroupsList, fetchingGroupsListError, addingGroup, addingGroupError, groups}=state;
+    const{fetchingGroupsList, fetchingGroupsListError, addingGroup, addingGroupError, groups, getGroupDetailsError, currentGroup, gettingGroupDetails}=state;
     const {token}=useContext(LoginContext)
+
     const addNewGroup=useCallback<AddNewGroupFunction>(addNewGroupCallback,[token])
+    const fetchGroups=useCallback<FetchGroupsFunction>(fetchGroupsCallback,[token]);
+    const getGroupDetails=useCallback<GetGroupDetailsFunction>(getGroupDetailsCallback, [token])
 
-    useEffect(fetchGroupsEffect,[token]);
+    useEffect(wsEffect,[token])
 
-    function fetchGroupsEffect(){
+    function getGroupDetailsCallback(groupID?:string){
+        fetchGroupDetails();
+        return ()=>{}
+
+        async function fetchGroupDetails(){
+            if(!token.trim()){
+                return
+            }else{
+                dispatch({type:GETTING_GROUP_DETAILS_STARTED})
+                try{
+                    let group=await getGroupDetailsApi(token, groupID)
+                    dispatch({type:GETTING_GROUP_DETAILS_SUCCEEDED, payload:{group}})
+                }catch (error){
+                    dispatch({type:GETTING_GROUP_DETAILS_FAILED, payload:{error}})
+                }
+            }
+        }
+    }
+
+    function fetchGroupsCallback(){
         console.log("Fantastic")
             fetchGroups();
             return ()=>{}
@@ -114,8 +162,33 @@ export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
     }
 
     return (
-        <GroupContext.Provider value={{fetchingGroupsListError,fetchingGroupsList, addNewGroup, addingGroupError, addingGroup, groups}}>
+        <GroupContext.Provider value={{gettingGroupDetails,currentGroup,getGroupDetailsError,fetchGroups,fetchingGroupsListError,fetchingGroupsList, addNewGroup, addingGroupError, addingGroup, groups, getGroupDetails}}>
             {children}
         </GroupContext.Provider>
     );
+
+    function wsEffect() {
+        let canceled = false;
+        console.log('wsEffect - connecting');
+        let closeWebSocket: () => void;
+        if (token?.trim()) {
+            closeWebSocket = newWebSocket(token, onMessage => {
+                if (canceled) {
+                    return;
+                }
+                const { type, payload } = onMessage;
+                log(`ws message, item ${type}`);
+                if (type === 'created' || type === 'updated') {
+
+                }else if (type === 'resolvedConflict') {
+
+                }
+            });
+        }
+        return () => {
+            log('wsEffect - disconnecting');
+            canceled = true;
+            closeWebSocket?.();
+        }
+    }
 };

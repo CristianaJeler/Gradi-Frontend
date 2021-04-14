@@ -1,7 +1,7 @@
 import {IonCardSubtitle, IonFooter, IonIcon, IonToolbar} from "@ionic/react";
 import React, {useEffect} from "react";
 import "../design/footer.css"
-import {callOutline, logoFacebook, logoInstagram} from "ionicons/icons";
+import {callOutline, logoFacebook, logoInstagram, logoWhatsapp} from "ionicons/icons";
 
 export const Footer: React.FC = () => {
     useEffect(() => {
@@ -11,9 +11,8 @@ export const Footer: React.FC = () => {
     }, []);
     return (
         <>
-            {/*<IonFooter translucent={true} className="ion-no-border" id={"myFooter"}>*/}
                 <IonToolbar id={"footerToolbar"} class={"myFooter"}>
-                    <IonCardSubtitle>©2021 Cristiana-Ioana Jeler</IonCardSubtitle>
+                    <IonCardSubtitle>©2021 Grădinița de acasă</IonCardSubtitle>
                     <a href={"https://www.facebook.com/cristiana.jeler/"}>
                         <IonIcon icon={logoFacebook} class={"footerSocialIcon"} id={"fb"}/>
                     </a>
@@ -22,10 +21,9 @@ export const Footer: React.FC = () => {
                     </a>
                     <br/>
 
-                    <IonIcon icon={callOutline} class={"footerSocialIcon"} id={"phone"}/>
-                    <IonCardSubtitle id={"phoneCardSubtitle"}>+4079836428</IonCardSubtitle>
+                    <IonIcon icon={logoWhatsapp} class={"footerSocialIcon"} id={"phone"}/>
+                    <IonCardSubtitle id={"phoneCardSubtitle"}>+40 7983 6428</IonCardSubtitle>
                 </IonToolbar>
-            {/*</IonFooter>*/}
         </>
     )
 };
