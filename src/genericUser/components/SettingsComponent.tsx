@@ -7,7 +7,6 @@ import {
     IonAvatar,
     IonButton,
     IonIcon,
-    IonImg,
     IonInput,
     IonItem,
     IonItemDivider,
@@ -19,22 +18,20 @@ import {
 } from "@ionic/react";
 import unknownProfile from "../../assets/img/profile.png"
 import "../design/settings.component.css"
-import {CameraResultType, CameraSource} from "@capacitor/core";
-import {useCamera} from '@ionic/react-hooks/camera'; //custom hook definit de cei de la Ionic
-import {base64FromPath} from "@ionic/react-hooks/filesystem";
+
 import {
     help,
     image, lockClosed,
-    medical, pencil, person,
+    medical, person,
 } from "ionicons/icons"
 import {UserContext} from "../provider/GenericUserProvider";
-import {PICTURE_TYPE} from "../utils/pictureType";
+import {PICTURE_TYPE} from "../utils/constants"
 import {LoginContext} from "../../authentication";
+import { usePhotoGallery} from "../utils/usePhotosGallery";
 
 
 export const SettingsComponent: React.FC = () => {
     const {logout} = useContext(LoginContext)
-    const {getPhoto} = useCamera();
     const [settingsType, setSettingsType]=useState("picture")
     const {
         updateProfilePic,
@@ -68,20 +65,12 @@ export const SettingsComponent: React.FC = () => {
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [passState, setPassState] = useState(true)
     const [showPasswordAlert, setShowPasswordAlert] = useState(false)
+    const { takePhoto } = usePhotoGallery();
 
-
-    const takePhoto = async () => {
-        const cameraPhoto = await getPhoto({
-            resultType: CameraResultType.Uri,
-            source: CameraSource.Camera,
-            quality: 100,
-            webUseInput: true //deschide direct input-ul de fisiere din pc
-        });
-
-        const base64Data = await base64FromPath(cameraPhoto.webPath!);
-
-        setUpdatedPic(base64Data)
-    };
+    const updatePhoto=async ()=>{
+        let photo=await takePhoto();
+        setUpdatedPic(photo)
+    }
 
     function updatePic() {
         updateProfilePic && updateProfilePic(updatedPic);
@@ -180,7 +169,7 @@ export const SettingsComponent: React.FC = () => {
                 </IonItemDivider>
                 <br/>
                 {updatedPic &&
-                <IonAvatar id={"profilePic"} onClick={takePhoto} title={"Editați fotografia"}>
+                <IonAvatar id={"profilePic"} onClick={updatePhoto} title={"Editați fotografia"}>
                     <img src={updatedPic} alt={"Fotografia de profil"}/>
                 </IonAvatar>}
             </IonItemGroup>}

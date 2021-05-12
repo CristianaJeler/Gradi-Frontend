@@ -1,0 +1,316 @@
+.renderingOption{
+    width: 100%;
+    --background: transparent;
+}
+.renderingOption:hover{
+    cursor: pointer;
+    color: #6d4e04;
+    --background: #f3e9d7;
+    --ion-color-base: black;
+}
+
+.renderingOption:hover .renderingOptionIcon{
+    color: #d69c09;
+}
+#renderingOptionsList{
+    display: inline-block;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.title{
+    font-size: xx-large;
+    max-height: 100px;
+    border-bottom: solid #d67309 2px;
+    color: #d67309;
+    text-align: center;
+}
+
+.renderedComponent{
+    display: inline-block;
+    align-content: center;
+    width: 70%;
+    max-width: 70%;
+    min-width: 70%;
+    float: right;
+    border-left: solid #674602 1px;
+    height: 100%;
+    --ion-background-color: #ffe07f;
+    box-shadow: 0 0 10px 0 #a47d02;
+}
+
+#searchbar{
+    --ion-background-color: #ffffff !important;
+    opacity: 60% !important;
+}
+
+.memberProfile{
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 6vw;
+    height: 6vw;
+}
+
+
+.searchedMember .memberIconDelete:hover{
+    color: rgb(238, 29, 29);
+    cursor: pointer;
+}
+.searchedMember .memberIconAdd:hover{
+    color: rgb(88, 181, 66);
+    cursor: pointer;
+}
+.searchedMember{
+    padding: 1%;
+    --background: rgba(255, 255, 255, 0.6);
+    border-radius: 20% 20% 20% 20%;
+}
+
+.alert{
+    --ion-background-color: #f5f1da;
+}
+.alertBtn{
+   color: #775902 !important;
+}
+
+.memberIconDelete{
+    color: #731e1e;
+}
+.memberIconAdd{
+    color: #164713;
+}
+
+#datePicker{
+    color: #5a4838;
+}
+#searchMemberTitle{
+    margin: auto;
+    max-width: 40%;
+}
+
+.newActivityItems{
+    --ion-background-color: rgba(255, 255, 255, 0.60);
+    max-width: 90%;
+    margin: auto;
+}
+.picker-toolbar-cancel,.picker-toolbar-button {
+    width: 50%;
+}
+.picker-button.ion-activatable.sc-ion-picker-md{
+    font-size: large;
+    margin-left: 30%;
+}
+.picker-button.ion-activatable.sc-ion-picker-md:hover{
+    color: #2e4dbf;
+}
+.datePicker *{
+    background: rgb(194, 235, 241);
+}
+
+.addActivityComponentBtn{
+    color: #053d68;
+}
+.addActivityComponentIcon {
+    color: #053d68 !important;
+}
+.addActivityComponentBtn:hover,.addActivityComponentBtn:hover .addActivityComponentIcon{
+    color: #6dbbc8 !important;
+    cursor: pointer;
+}
+#btnSendActivity{
+    --background: #f8c876;
+    height: 80%;
+    color: #4e2400;
+    font-size: larger;
+}
+.activityLinks{
+    min-width: 100%;
+    display: inline-block;
+    align-content: center;
+}
+
+.modalContent{
+    --background: transparent;
+    background-color: rgba(246, 222, 149, 0.24);
+}
+
+#checkAllListItem{
+    --background: transparent;
+    position: sticky !important;
+}
+.modalListItem{
+    --background: rgba(255, 255, 255, 0.53);
+    max-width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 3px;
+}
+
+#groupMembersListButton{
+    --background: #f8c876;
+    color: #4e2400;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal{
+    --background: rgb(243, 214, 176);
+}
+.newActivityLink{
+    --ion-background-color: rgba(245, 234, 234, 0.58);
+    background-color:  rgba(245, 234, 234, 0.58);
+    max-width: 88%;
+    margin: auto;
+    border-left: 2px solid rgba(0, 0, 0, 0.20);
+    border-right: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+#linkModal{
+    --max-height: 40%;
+    --max-width:30%;
+}
+#linkModalButton{
+    --background: #f8c876;
+    color: #4e2400;
+    max-width: 60%;
+    margin: auto;
+}
+.linkModalInput{
+    max-width: 80%;
+    max-height: 20%;
+    font-size: larger;
+    border-radius: 3%;
+    margin:auto;
+    border: 2px solid rgba(0, 0, 0, 0.31);
+    --background: rgba(255, 255, 255, 0.58);
+}
+.trashIcon{
+    --height:100%;
+    margin-right: 20px;
+    color: red;
+}
+.trashIcon:hover{
+    cursor:pointer;
+    color: #5a0505 !important;
+}
+
+#mediaContent{
+    width: 90%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.loadedImage{
+    width:100px;
+    height:100px;
+    margin:10px 0 10px 20px;
+    border-radius: 10%;
+    display: inline-block;
+}
+
+.loadedVideo{
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10%;
+}
+.gameModalListItemAvatar{
+    margin: -10px 10px 2px 15px;
+    display: inline-block;
+    float: left;
+}
+.gameModalListItemTitle{
+    display: inline-block;
+}
+.gameModalListItemDescription{
+    display: inline-block;
+}
+.checkedGamesListItemAvatar{
+    margin-top: 2px;
+}
+
+.gameCardHeader {
+    font-weight: bold;
+    margin-top: -4%;
+}
+.gameModalListItemLabel{
+    display: inline-block;
+}
+.gameTitleAndDescription{
+    display: inline-block;
+}
+.gameModalListItem:hover{
+    cursor: auto;
+}
+.gameModalListItem{
+    color: #8b6005;
+}
+.gameCheckBoxDiv{
+    display: inline-block;
+    float: right;
+}
+.gameCheckbox{
+    margin-left: 5px;
+    margin-bottom:-2px;
+}
+.gameModalListItemLabel:hover{
+    color: #80c0ef;
+}
+
+.checkedGamesListItem{
+    margin: 0 0 0 10px;
+}
+.fieldLabel{
+    display: inline-block !important;
+    float: left !important;
+    margin-left: 15px;
+    min-width: 20%;
+    margin-top: 10px;
+}
+
+.feedbackIcon{
+    float: right;
+    margin-top: -5%;
+    --width: 10%;
+    --height: 60%;
+}
+.slideImg{
+    height: 20%;
+    width: 80%;
+}
+.resultsDiv{
+    background-color: rgba(246, 245, 238, 0.47);
+    width: 95%;
+    margin: auto;
+}
+
+.tableCell{
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+#btnBack{
+    --background: rgba(196, 71, 3, 0.75);
+    color: #ffffff;
+    font-size: larger;
+    float: left;
+    --box-shadow:none;
+    margin-left:1%;
+}
+
+#btnBadge{
+    --background: rgba(196, 71, 3, 0.75);
+    color: #ffffff;
+    font-size: larger;
+    float: right;
+    --box-shadow:none;
+}
+
+#answerComponentHeader{
+    text-align: center;
+}
+
+

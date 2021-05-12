@@ -24,7 +24,7 @@ export interface LoginState {
 }
 
 const loginInitialState: LoginState = {
-    isAuthenticated: false,
+    isAuthenticated: true,
     isAuthenticating: false,
     authenticationError: null,
     pendingAuthentication: false,
@@ -132,6 +132,14 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
                         userType: userType.value,
                         pendingAuthentication: false,
                         isAuthenticated: true,
+                        isAuthenticating: false,
+                    });
+                }else{
+                    setLoginState({
+                        ...loginState,
+                        token: '',
+                        userType: '',
+                        isAuthenticated: false,
                         isAuthenticating: false,
                     });
                 }

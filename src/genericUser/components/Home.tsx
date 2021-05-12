@@ -25,9 +25,6 @@ export const Home: React.FC<RouteComponentProps>  = () => {
             )
         default:
             return (
-                // <>
-                //     <Redirect to={"/homepage"}/>
-                // </>
                 <IonPage>
                     <MainHeader/>
                     <IonContent>

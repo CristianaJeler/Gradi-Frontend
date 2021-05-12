@@ -9,8 +9,8 @@ import {
     searchUsers as searchUsersAPI,
     addMemberToGroup as addMemberToGroupAPI,
     deleteMemberFromGroup as deleteMemberFromGroupAPI,
+    fetchGroupMembers as fetchGroupMembersAPI
 } from "../api/GenericUserApi"
-import {GroupContext} from "../../groups/provider/GroupsProvider";
 
 
 type UpdateProfilePicFunction = (picture?: string) => Promise<any>;
@@ -19,6 +19,7 @@ type UpdatePasswordFunction = (oldPswd?: string, newPswd?: string) => Promise<an
 type SearchUsersFunction = (searchCriteria?: string, groupID?: string, page?: number, size?: number) => void;
 type AddMemberToGroupFunction=(id:string, groupId:string)=>Promise<any>
 type DeleteMemberFromGroupFunction=(id:string, groupId:string)=>Promise<any>
+type FetchGroupMembersFunction=(groupId:string)=>Promise<any>
 
 export interface UserProps {
     username?: string,
@@ -68,6 +69,7 @@ export interface UserState {
     searchUsersError: Error | null;
     addMemberToGroup?:AddMemberToGroupFunction;
     deleteMemberFromGroup?:DeleteMemberFromGroupFunction;
+    fetchGroupMembers?:FetchGroupMembersFunction;
 }
 
 const initialState: UserState = {
@@ -124,6 +126,10 @@ const ADD_MEMBER_FAILED="ADD_MEMBER_FAILED"
 const DELETE_MEMBER_STARTED="DELETE_MEMBER_STARTED"
 const DELETE_MEMBER_SUCCEEDED="DELETE_MEMBER_SUCCEEDED"
 const DELETE_MEMBER_FAILED="DELETE_MEMBER_FAILED"
+
+const FETCH_GROUP_MEMBERS_STARTED="FETCH_GROUP_MEMBERS_STARTED"
+const FETCH_GROUP_MEMBERS_SUCCEEDED="FETCH_GROUP_MEMBERS_SUCCEEDED"
+const FETCH_GROUP_MEMBERS_FAILED="FETCH_GROUP_MEMBERS_FAILED"
 
 const reducer: (state: UserState, action: ActionProperties) => UserState =
     (state, {type, payload}) => {
@@ -229,6 +235,13 @@ const reducer: (state: UserState, action: ActionProperties) => UserState =
                     ...state,
                     searchedUsers: allUsers,
                 }
+            case FETCH_GROUP_MEMBERS_SUCCEEDED:
+                    return {
+                        ...state,
+                        searchedUsers: payload.groupMembers,
+                        searchUsersError: null,
+                        searchingUsers: false
+                    }
             default:
                 return state;
         }
@@ -244,6 +257,7 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
     const searchUsers = useCallback<SearchUsersFunction>(searchUsersCallback, [token]);
     const addMemberToGroup=useCallback<AddMemberToGroupFunction>(addMemberToGroupCallback,[token])
     const deleteMemberFromGroup=useCallback<DeleteMemberFromGroupFunction>(deleteMemberFromGroupCallback,[token])
+    const fetchGroupMembers=useCallback<FetchGroupMembersFunction>(fetchGroupMembersCallback,[token])
     const {
         updatingProfileDetails,
         passwordUpdatedSuccessfully,
@@ -351,37 +365,19 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
         }
     }
 
-    return (
-        <UserContext.Provider value={{
-            passwordUpdatedSuccessfully,
-            updatingProfileDetails,
-            updatingProfilePicture,
-            updateProfileDetails,
-            profileDetailsUpdateError,
-            gettingAccountDetails,
-            updateProfilePic,
-            getAccountDetailsError,
-            profilePicUpdateError,
-            updatingPassword,
-            passwordUpdateError,
-            updatePassword,
-            phone,
-            username,
-            lastName,
-            firstName,
-            kindergarten,
-            picture,
-            email,
-            searchedUsers,
-            searchUsers,
-            searchingUsers,
-            searchUsersError,
-            deleteMemberFromGroup,
-            addMemberToGroup
-        }}>
-            {children}
-        </UserContext.Provider>
-    );
+    async function fetchGroupMembersCallback(groupId:string){
+        if(!token.trim()){
+            return
+        }else{
+            dispatch({type:FETCH_GROUP_MEMBERS_STARTED})
+            try{
+                let groupMembers=await fetchGroupMembersAPI(token,groupId)
+                dispatch({type:FETCH_GROUP_MEMBERS_SUCCEEDED, payload:{groupMembers}})
+            }catch (error){
+                dispatch({type:FETCH_GROUP_MEMBERS_FAILED, payload:{error}})
+            }
+        }
+    }
 
     async function updateProfilePicCallback(picture?: string) {
         try {
@@ -413,4 +409,37 @@ export const GenericUserProvider: React.FC<UserProviderProps> = ({children}) => 
             dispatch({type: PASSWORD_UPDATE_FAILED, payload: {error: new Error(updated.message)}})
         }
     }
+
+    return (
+        <UserContext.Provider value={{
+            passwordUpdatedSuccessfully,
+            updatingProfileDetails,
+            updatingProfilePicture,
+            updateProfileDetails,
+            profileDetailsUpdateError,
+            gettingAccountDetails,
+            updateProfilePic,
+            getAccountDetailsError,
+            profilePicUpdateError,
+            updatingPassword,
+            passwordUpdateError,
+            updatePassword,
+            phone,
+            username,
+            lastName,
+            firstName,
+            kindergarten,
+            picture,
+            email,
+            searchedUsers,
+            searchUsers,
+            searchingUsers,
+            searchUsersError,
+            deleteMemberFromGroup,
+            addMemberToGroup,
+            fetchGroupMembers
+        }}>
+            {children}
+        </UserContext.Provider>
+    );
 }

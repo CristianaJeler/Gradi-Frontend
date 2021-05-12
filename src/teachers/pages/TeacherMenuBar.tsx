@@ -26,10 +26,10 @@ export const TeacherMenuBar: React.FC = () => {
                 <IonToolbar id={"header"}>
                     <IonImg id={"img"} src={logo} onClick={() => window.location.href = "/home"} title={"Acasă"}/>
                     <IonItem class={"menuButton"} lines={"none"} routerLink={"/teachers/groups"}>
-                        <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"}/> Grupele mele</IonLabel>
+                        <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"}/> Grupe</IonLabel>
                     </IonItem>
                     <IonItem class={"menuButton"} lines={"none"} >
-                        <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"}/> Activități</IonLabel>
+                        <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"}/> Jocuri</IonLabel>
                     </IonItem>
                     <NotificationsPopover/>
                     <SettingsPopover userType={"teachers"}/>

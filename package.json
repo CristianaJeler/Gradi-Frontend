@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@capacitor/core": "2.4.1",
+    "@capacitor/android": "^2.4.7",
+    "@capacitor/core": "2.4.7",
     "@ion-phaser/react": "^1.2.2",
     "@ionic/core": "^5.5.4",
     "@ionic/pwa-elements": "^3.0.2",
@@ -19,8 +20,6 @@
     "@types/react-dom": "^16.9.10",
     "@types/react-router-dom": "^5.1.6",
     "axios": "^0.21.0",
-    "capacitor-youtube-player": "^1.0.0",
-    "cordova-plugin-email-composer": "^0.9.2",
     "ionicons": "^5.0.0",
     "phaser": "^3.52.0",
     "react": "^17.0.1",
@@ -55,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "2.4.7",
     "@types/react-router": "^5.1.8",
     "react-router-dom": "^5.2.0"
   }

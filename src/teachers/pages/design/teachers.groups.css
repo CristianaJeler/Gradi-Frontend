@@ -4,7 +4,7 @@
     max-height: 30%;
     max-width: 20%;
     display: inline-block;
-    background-color: #ecf6c9;
+    background-color: #faeeb3 !important;
     text-align: center;
 }
 .groupInfo{
@@ -39,13 +39,15 @@
 .groupImg{
     margin-right: auto;
     margin-left: auto;
+    min-height: 100px;
+    min-width: 100px;
     border-style: double;
     border-color: #d69c09;
 }
 
 .groupCard:hover{
     cursor: pointer;
-    background-color: #efeabc;
+    background-color: #efeabc !important;
 }
 #groupModal{
     --border-radius: 10%;
@@ -89,4 +91,7 @@
     width: 50%;
     margin: auto;
     --background: #d69c09;
+}
+#teacherGroupsContent{
+    --background:url("./images/background.png") no-repeat center center / cover;
 }

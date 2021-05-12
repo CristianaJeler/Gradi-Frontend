@@ -44,7 +44,7 @@ export const TeachersGroups: React.FC = () => {
 
     useEffect(()=>{
         fetchGroups && fetchGroups()
-    }, [])
+    }, [fetchGroups])
 
     function deselectPic() {
         const el = document.getElementById(newGroupImg);
@@ -59,7 +59,7 @@ export const TeachersGroups: React.FC = () => {
     return (
         <IonPage>
             <TeacherMenuBar/>
-            <IonContent>
+            <IonContent id={"teacherGroupsContent"}>
                 <IonTitle id={"groupsTitle"}>Grupe</IonTitle>
                 <IonButton id={"openAddBtn"} onClick={() => {
                     setOpenModal(true);
@@ -97,6 +97,8 @@ export const TeachersGroups: React.FC = () => {
                 </IonModal>
                 <Footer/>
             </IonContent>
+
+
             {fetchingGroupsList && <IonLoading isOpen={true} message={"Încărcăm datele grupelor dumneavoastră!"}/>}
             {fetchingGroupsListError &&
             <IonAlert isOpen={true} message={"A apărut o eroare la încărcarea grupelor dumneavoastră!"}/>}

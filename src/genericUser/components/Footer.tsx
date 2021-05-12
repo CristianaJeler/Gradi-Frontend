@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
     }, []);
     return (
         <>
-                <IonToolbar id={"footerToolbar"} class={"myFooter"}>
+                <IonFooter id={"footerToolbar"} class={"myFooter"}>
                     <IonCardSubtitle>©2021 Grădinița de acasă</IonCardSubtitle>
                     <a href={"https://www.facebook.com/cristiana.jeler/"}>
                         <IonIcon icon={logoFacebook} class={"footerSocialIcon"} id={"fb"}/>
@@ -23,7 +23,7 @@ export const Footer: React.FC = () => {
 
                     <IonIcon icon={logoWhatsapp} class={"footerSocialIcon"} id={"phone"}/>
                     <IonCardSubtitle id={"phoneCardSubtitle"}>+40 7983 6428</IonCardSubtitle>
-                </IonToolbar>
+                </IonFooter>
         </>
     )
 };

@@ -41,5 +41,10 @@ export const addMemberToGroup:(token?:string, groupID?:string, memberID?:string)
 
 export const deleteMemberFromGroup:(token?:string, groupID?:string, memberID?:string)=>Promise<any>=((token, groupID, memberID)=>{
     let response = axios.delete(usersURL+"/"+memberID+"/"+groupID, authorizationConfig(token));
-    return withLogs(response, 'getGroupDetails')
+    return withLogs(response, 'deleteMemberFromGroup')
+})
+
+export const fetchGroupMembers:(token?:string, groupId?:string)=>Promise<SearchedUserProps[]>=((token, groupId)=>{
+    let response = axios.get(usersURL+"/"+groupId,  authorizationConfig(token));
+    return withLogs(response, 'getGroupMembers')
 })

@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
+import React, {useContext, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import { Redirect, Route } from 'react-router-dom';
-import { LoginContext, LoginState } from '../provider/AuthenticationProvider';
-import { getLogger } from '../../core';
+import {Redirect, Route} from 'react-router-dom';
+import {LoginContext, LoginState} from '../provider/AuthenticationProvider';
+import {getLogger} from '../../core';
+import {Storage} from "@capacitor/core";
 
 const log = getLogger('Login');
 
@@ -12,19 +13,17 @@ export interface PrivateRouteProps {
     exact?: boolean;
 }
 
-export const PrivateRoute: React.FC<PrivateRouteProps> = ({ component: Component, ...rest }) => {
-    const { isAuthenticated } = useContext<LoginState>(LoginContext);
+export const PrivateRoute: React.FC<PrivateRouteProps> = ({component: Component, ...rest}) => {
+    const {isAuthenticated} = useContext<LoginState>(LoginContext);
     log('render, isAuthenticated', isAuthenticated);
+
     return (
         <Route {...rest} render={props => {
             if (isAuthenticated) {
-                console.log("is Authenticated here")
                 // @ts-ignore
                 return <Component {...props} />;
             }
-
-            console.log("Redirecting tho")
-            return <Redirect to={{ pathname: '/' }}/>
+            return <Redirect to={{pathname: '/'}}/>
         }}/>
     );
 }

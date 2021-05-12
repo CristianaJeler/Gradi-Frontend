@@ -77,7 +77,7 @@ export const Signup: React.FC<RouteComponentProps>=({history})=>{
             <AuthHeader/>
             <IonContent  id={"signup_page"}>
                 <IonCard id={"signup_grid"}>
-                    <IonSelect placeholder={"Tipul de utilizator"} class={"signup_input"} value={status} onIonChange={e=>setState({...signupState, status:e.detail.value||''})}>
+                    <IonSelect interface="popover" placeholder={"Tipul de utilizator"} class={"signup_input"} value={status} onIonChange={e=>setState({...signupState, status:e.detail.value||''})}>
                             <IonSelectOption value={"1"}>
                                 Educator
                             </IonSelectOption>

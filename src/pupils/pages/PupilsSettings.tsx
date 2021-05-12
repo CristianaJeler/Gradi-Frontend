@@ -8,6 +8,7 @@ import "../../genericUser/design/settings.component.css"
 import Footer from "../../genericUser/components/Footer";
 import { SettingsComponent } from "../../genericUser/components/SettingsComponent";
 import {PupilMenuBar} from "./PupilMenuBar";
+import React from "react";
 
 export const PupilsSettings: React.FC<RouteComponentProps> = () => {
     return (
@@ -18,8 +19,9 @@ export const PupilsSettings: React.FC<RouteComponentProps> = () => {
             <IonContent>
                 <SettingsComponent/>
                 <br/>
-                <Footer/>
+
             </IonContent>
+            <Footer/>
         </IonPage>
     )
 };

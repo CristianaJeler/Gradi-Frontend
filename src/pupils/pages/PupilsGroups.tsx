@@ -37,7 +37,7 @@ export const PupilsGroups: React.FC = () => {
     const {groups, fetchingGroupsListError, fetchingGroupsList, fetchGroups} = useContext(GroupContext);
     useEffect(()=>{
         fetchGroups && fetchGroups()
-    }, [])
+    }, [fetchGroups])
     return (
         <IonPage>
             <PupilMenuBar/>

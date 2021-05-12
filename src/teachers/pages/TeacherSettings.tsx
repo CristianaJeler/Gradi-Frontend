@@ -19,9 +19,9 @@ export const TeacherAccountSettings: React.FC<RouteComponentProps> = () => {
             <IonContent>
                 <SettingsComponent/>
                 <br/>
-                <Footer/>
-            </IonContent>
 
+            </IonContent>
+            <Footer/>
         </IonPage>
     )
 };

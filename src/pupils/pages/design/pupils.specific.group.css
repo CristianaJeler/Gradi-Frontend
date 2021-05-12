@@ -1,0 +1,107 @@
+.renderingOption{
+    width: 100%;
+    --background: transparent;
+}
+.renderingOption:hover{
+    cursor: pointer;
+    color: #6d4e04;
+    --background: #f3e9d7;
+    --ion-color-base: black;
+}
+
+.renderingOption:hover .renderingOptionIcon{
+    color: #d69c09;
+}
+#renderingOptionsList{
+    display: inline-block;
+    min-width: 30%;
+    max-width: 30%;
+}
+
+.title{
+    font-size: xx-large;
+    max-height: 100px;
+    border-bottom: solid #d67309 2px;
+    color: #d67309;
+    text-align: center;
+}
+
+.renderedComponent{
+    display: inline-block;
+    align-content: center;
+    width: 70%;
+    max-width: 70%;
+    min-width: 70%;
+    float: right;
+    border-left: solid #674602 1px;
+    height: 100%;
+    --ion-background-color: #ffe07f;
+    box-shadow: 0 0 10px 0 #a47d02;
+}
+
+
+
+
+.currentActivity{
+    padding: 1%;
+    --background: rgba(255, 255, 255, 0.6);
+}
+.currentActivity:hover{
+    cursor: pointer;
+    --background: rgba(255, 255, 255, 0.7);
+}
+
+.activityItems{
+    --ion-background-color: rgba(255, 255, 255, 0);
+    max-width: 90%;
+    margin: auto;
+}
+
+#btnBack{
+    --background: rgba(196, 129, 3, 0.75);
+    color: #ffffff;
+    font-size: larger;
+}
+
+#answerBtn{
+    --background: rgba(196, 129, 3, 0.75);
+    color: #ffffff;
+    font-size: larger;
+}
+
+
+#activityTitle{
+    text-align: center;
+    font-size: x-large;
+    color: #322207;
+}
+#dateSubtitle{
+    text-align: center;
+    margin: auto;
+}
+.slide{
+    max-width: 80%;
+    max-height: 50%;
+}
+.addActivityComponentIcon{
+    margin-right: 1%;
+}
+
+
+.gamePoints{
+    width: 100% !important;
+    text-decoration: black;
+}
+.result{
+    width: 90% !important;
+    margin: auto;
+}
+.resultsList{
+    width: 100%;
+}
+
+.answerDiv{
+    background-color: rgba(255, 255, 255, 0.58);
+    max-width: 100%;
+    margin: auto;
+}

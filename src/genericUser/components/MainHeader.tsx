@@ -8,7 +8,7 @@ export const MainHeader: React.FC = () => {
         <>
             <IonHeader>
                 <IonToolbar id={"header"}>
-                    <IonImg id={"img"} src={logo} onClick={()=>window.location.href="/homepage"}/>
+                    <IonImg id={"img"} src={logo} onClick={()=>window.location.href="/home"}/>
 
                     <IonButtons slot="end">
                         <IonButton routerLink={"/login"}>

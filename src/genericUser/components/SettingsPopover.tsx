@@ -7,7 +7,7 @@ import {LoginContext} from "../../authentication";
 import {PopoverEvent} from "../../pupils/pages/PupilMenuBar";
 import {UserContext} from "../provider/GenericUserProvider";
 import defaultProfilePic from "../../assets/img/profile.png";
-import {PICTURE_TYPE} from "../utils/pictureType";
+import {PICTURE_TYPE} from "../utils/constants";
 export const SettingsPopover: React.FC<{userType:string}> = (usertype) => {
     const {logout} = useContext(LoginContext)
     const [showPopover, setShowPopover] = useState<PopoverEvent>({show:false,event:undefined})
