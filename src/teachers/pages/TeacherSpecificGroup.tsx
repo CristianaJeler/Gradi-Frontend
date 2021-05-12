@@ -86,7 +86,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
         groupActivities
     } = useContext(ActivitiesContext)
 
-    const{badges, gettingBadges, getBadgesError, getAllBadges}=useContext(BadgesContext)
+    const {badges, getAllBadges, gettingBadges, getBadgesError} = useContext(BadgesContext)
 
 
     const [currentPage, setCurrentPage] = useState(0)
@@ -267,9 +267,11 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
 
 
     useEffect(() => {
-        if (renderingComponent === 'badges')
+        if (renderingComponent === 'badges') {
+            console.log("AICI IN TEACHER GROUP")
             getAllBadges && getAllBadges()
-    }, [getAllBadges, renderingComponent]);
+        }
+    }, [renderingComponent]);
 
     return (<>
         <IonPage>
@@ -774,17 +776,19 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
 
 
                 {/*BADGES*/}
-                {renderingComponent==='badges' && <IonContent  class={"renderedComponent"}>
+                {renderingComponent === 'badges' && <IonContent class={"renderedComponent"}>
                     <br/>
                     <IonFabButton onClick={() => {
                         setRenderingComponent("selectedAnswer");
                     }}
                                   id={"btnBack"}><IonIcon icon={arrowBack}/></IonFabButton>
-                    <br/>
+                    <br/><br/><br/>
                     <IonRadioGroup>
-                        {badges && badges.map(badge=><IonRadio key={badge.id}>
-                            <IonImg src={badge.content}/>
-                        </IonRadio>)}
+                        {badges && badges.map(badge => {
+                            return <span className={"badgeDiv"}>
+                                <IonImg src={PICTURE_TYPE+badge.content} class={"badgeImg"}/>
+                            </span>
+                        })}
                     </IonRadioGroup>
                 </IonContent>}
 

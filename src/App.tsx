@@ -38,6 +38,7 @@ import {TeacherSpecificGroup} from "./teachers/pages/TeacherSpecificGroup";
 import {GamesProvider} from "./games/provider/GamesProvider";
 import {ActivitiesProvider} from "./activities/provider/ActivitiesProvider";
 import {PupilSpecificGroup} from "./pupils/pages/PupilSpecificGroup";
+import {BadgesProvider} from "./badges/provider/BadgeProvider";
 
 const App: React.FC = () => {
     return (<IonApp>
@@ -49,31 +50,36 @@ const App: React.FC = () => {
                         <Route exact path="/" render={() => <Redirect to="/home"/>}/>
                         <Route component={Home} path={"/home"}/>
                         <ActivitiesProvider>
-                        <GamesProvider>
+                            <GamesProvider>
 
-                            <GenericUserProvider>
-                                {/*<TeachersProvider>*/}
+                                <GenericUserProvider>
+                                    {/*<TeachersProvider>*/}
                                     <PrivateRoute component={TeacherHome} path={"/teachers"} exact={true}/>
                                     <PrivateRoute component={AccountSettings} path={"/teachers/settings"} exact={true}/>
-                                {/*</TeachersProvider>*/}
+                                    {/*</TeachersProvider>*/}
+                                    <BadgesProvider>
+                                        <GroupsProvider>
 
-                                <GroupsProvider>
-                                    <PrivateRoute component={TeachersGroups} path={"/teachers/groups"} exact={true}/>
-                                    <PrivateRoute component={TeacherSpecificGroup} path={"/teachers/groups/:id"}
-                                                  exact={true}/>
-                                    <PrivateRoute component={PupilsGroups} path={"/pupils/groups"} exact={true}/>
-                                    <PrivateRoute component={PupilSpecificGroup} path={"/pupils/groups/:id"}
-                                                  exact={true}/>
-                                </GroupsProvider>
+                                            <PrivateRoute component={TeachersGroups} path={"/teachers/groups"}
+                                                          exact={true}/>
+                                            <PrivateRoute component={TeacherSpecificGroup} path={"/teachers/groups/:id"}
+                                                          exact={true}/>
+                                            <PrivateRoute component={PupilsGroups} path={"/pupils/groups"}
+                                                          exact={true}/>
+                                            <PrivateRoute component={PupilSpecificGroup} path={"/pupils/groups/:id"}
+                                                          exact={true}/>
 
-                                {/*<PupilsProvider>*/}
+                                        </GroupsProvider>
+                                    </BadgesProvider>
+
+                                    {/*<PupilsProvider>*/}
                                     <PrivateRoute component={PupilHome} path={"/pupils"} exact={true}/>
                                     <PrivateRoute component={PupilsSettings} path={"/pupils/settings"} exact={true}/>
-                                {/*</PupilsProvider>*/}
-                                <PrivateRoute component={Starfall} path={"/games/starfall/:act"} exact={true}/>
-                                <PrivateRoute component={Starfall} path={"/games/starfall"} exact={true}/>
-                            </GenericUserProvider>
-                        </GamesProvider>
+                                    {/*</PupilsProvider>*/}
+                                    <PrivateRoute component={Starfall} path={"/games/starfall/:act"} exact={true}/>
+                                    <PrivateRoute component={Starfall} path={"/games/starfall"} exact={true}/>
+                                </GenericUserProvider>
+                            </GamesProvider>
                         </ActivitiesProvider>
                     </AuthenticationProvider>
                 </IonRouterOutlet>

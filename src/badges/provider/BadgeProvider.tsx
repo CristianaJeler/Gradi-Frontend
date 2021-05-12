@@ -82,8 +82,9 @@ export const BadgesProvider: React.FC<BadgesProviderProps> = ({children}) => {
         } else {
             dispatch({type: GET_ALL_BADGES_STARTED})
             try {
+                console.log("AICI IN PROVIDER")
                 let badges=await getAllBadgesApi(token)
-                dispatch({type: GET_ALL_BADGES_SUCCEEDED, payload:{badges}})
+                dispatch({type: GET_ALL_BADGES_SUCCEEDED, payload:{badges:badges}})
             } catch (error) {
                 dispatch({type:GET_ALL_BADGES_FAILED, payload: {error}})
             }

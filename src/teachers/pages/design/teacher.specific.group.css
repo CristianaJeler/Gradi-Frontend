@@ -313,4 +313,15 @@ input[type="file"] {
     text-align: center;
 }
 
+.badgeImg{
+    max-width: 50%;
+    max-height: 90%;
+    border:dotted black 1px;
+    background-color: floralwhite;
+}
 
+.badgeDiv{
+    display: inline-block;
+    width:35%;
+    margin-left: 15%;
+}
