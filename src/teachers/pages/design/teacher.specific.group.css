@@ -316,12 +316,27 @@ input[type="file"] {
 .badgeImg{
     max-width: 50%;
     max-height: 90%;
-    border:dotted black 1px;
     background-color: floralwhite;
 }
 
 .badgeDiv{
     display: inline-block;
     width:35%;
-    margin-left: 15%;
+    margin-left: 5%;
+}
+
+
+.badgeDiv:hover{
+    cursor: pointer;
+    opacity:0.8;
+
+}
+
+#giveBadgeBtn{
+    float: right;
+    margin-right: 5%;
+    --background: rgba(196, 71, 3, 0.75);
+    color: #ffffff;
+    font-size: larger;
+    --box-shadow:none;
 }

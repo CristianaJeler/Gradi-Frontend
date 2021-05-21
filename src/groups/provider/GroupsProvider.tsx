@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {LoginContext} from "../../authentication";
 import {getGroups as getGroupsApi, addGroup as addGroupApi, getGroupDetails as getGroupDetailsApi} from "../api/GroupsApi";
 import {getLogger} from "../../core";
-import {newWebSocket} from "../../core/websockets";
+import {ActivitiesContext} from "../../activities/provider/ActivitiesProvider";
 
 export interface GroupProperties{
     id?:string;
@@ -39,6 +39,7 @@ export const GroupContext = React.createContext<GroupsState>(initialState);
 
 interface GroupsProviderProps {
     children: PropTypes.ReactNodeLike,
+    // socket:WebSocket
 }
 
 
@@ -65,6 +66,8 @@ const GETTING_GROUP_DETAILS_STARTED = 'GETTING_GROUP_DETAILS_STARTED'
 const GETTING_GROUP_DETAILS_FAILED = 'GETTING_GROUP_DETAILS_FAILED'
 const GETTING_GROUP_DETAILS_SUCCEEDED = 'GETTING_GROUP_DETAILS_SUCCEEDED'
 
+const DELETED_MEMBER_FROM_GROUP="DELETED_MEMBER_FROM_GROUP"
+const MEMBER_ADDED_TO_GROUP='MEMBER_ADDED_TO_GROUP'
 
 const reducer: (state: GroupsState, action: ActionProperties) => GroupsState =
     (state, {type, payload}) => {
@@ -89,6 +92,14 @@ const reducer: (state: GroupsState, action: ActionProperties) => GroupsState =
                 return {...state, getGroupDetailsError:null,gettingGroupDetails:false, currentGroup:payload.group}
             case GETTING_GROUP_DETAILS_FAILED:
                 return {...state, getGroupDetailsError:payload.error, gettingGroupDetails:false, currentGroup:null}
+            case DELETED_MEMBER_FROM_GROUP:
+                let groupList=[...(state.groups || [])]
+                groupList.splice(groupList.findIndex(g=>g.id===payload.group.id),1)
+                return {...state,groups:groupList}
+            case MEMBER_ADDED_TO_GROUP:
+                let list=[...(state.groups || [])]
+                list.push(payload.group)
+                return {...state, addingGroup:false, addingGroupError:null, groups:list}
             default:
                 return state;
         }
@@ -97,16 +108,45 @@ const reducer: (state: GroupsState, action: ActionProperties) => GroupsState =
 
 const log=getLogger("GroupProvider")
 
-export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
+export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children,}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const{fetchingGroupsList, fetchingGroupsListError, addingGroup, addingGroupError, groups, getGroupDetailsError, currentGroup, gettingGroupDetails}=state;
-    const {token}=useContext(LoginContext)
+    const {token,socket}=useContext(LoginContext)
 
     const addNewGroup=useCallback<AddNewGroupFunction>(addNewGroupCallback,[token])
     const fetchGroups=useCallback<FetchGroupsFunction>(fetchGroupsCallback,[token]);
     const getGroupDetails=useCallback<GetGroupDetailsFunction>(getGroupDetailsCallback, [token])
+    useEffect(()=>{
+        let canceled = false;
+        if (token?.trim()) {
+            if (canceled) {
+                return;
+            }
+            if (socket !== null) {
+                socket.onmessage = messageEvent => {
+                    console.log('web socket onmessage ' + messageEvent.data);
+                    let res = JSON.parse(messageEvent.data);
+                    switch (res.type) {
+                        case "memberAddedToGroup":
+                            dispatch({type: MEMBER_ADDED_TO_GROUP, payload: {group: res.result}})
+                            break;
+                        case "memberDeletedFromGroup":
+                            console.log("FAIN")
+                            dispatch({type: DELETED_MEMBER_FROM_GROUP, payload: {group: res.result}})
+                            break;
+                    }
+                    console.log(`ws message, item ${res.type}`);
+                }
+                // }
+                return () => {
+                    console.log('wsEffect - disconnecting');
+                    // canceled = true;
+                    // socket.close();
+                }
+            }
+        }
 
-    useEffect(wsEffect,[token])
+    })
 
     function getGroupDetailsCallback(groupID?:string){
         fetchGroupDetails();
@@ -168,27 +208,59 @@ export const GroupsProvider: React.FC<GroupsProviderProps> = ({ children }) => {
     );
 
     function wsEffect() {
-        let canceled = false;
-        console.log('wsEffect - connecting');
-        let closeWebSocket: () => void;
-        if (token?.trim()) {
-            closeWebSocket = newWebSocket(token, onMessage => {
-                if (canceled) {
-                    return;
-                }
-                const { type, payload } = onMessage;
-                log(`ws message, item ${type}`);
-                if (type === 'created' || type === 'updated') {
+        // let canceled = false;
+        // console.log('wsEffect - connecting');
+        // let closeWebSocket: () => void;
+        // if (token?.trim()) {
+        //     closeWebSocket = newWebSocket(token, onMessage => {
+        //         if (canceled) {
+        //             return;
+        //         }
+        //         const { type, result } = onMessage;
+        //
+        //         switch (type){
+        //             case "memberAddedToGroup":
+        //                 dispatch({type:MEMBER_ADDED_TO_GROUP,payload:{group:result}})
+        //                 break;
+        //             case "memberDeletedFromGroup":
+        //                 dispatch({type:DELETED_MEMBER_FROM_GROUP,payload:{group:result}})
+        //                 break;
+        //         }
+        //         log(`ws message, item ${type}`);
+        //     });
+        // }
+        // return () => {
+        //     log('wsEffect - disconnecting');
+        //     canceled = true;
+        //     closeWebSocket?.();
+        // }
+        // let canceled = false;
+        //     console.log("YES SOCKET")
+        //     if (token?.trim()) {
+        //         if (canceled) {
+        //             return;
+        //         }
+        //         socket.onmessage = messageEvent => {
+        //             console.log('web socket onmessage ' + messageEvent.data);
+        //             let res = JSON.parse(messageEvent.data);
+        //             console.log("TYPE "+res.type)
+        //             switch (res.type) {
+        //                 case "memberAddedToGroup":
+        //                     dispatch({type: MEMBER_ADDED_TO_GROUP, payload: {group: res.result}})
+        //                     break;
+        //                 case "memberDeletedFromGroup":
+        //                     console.log("FAIN")
+        //                     dispatch({type: DELETED_MEMBER_FROM_GROUP, payload: {group: res.result}})
+        //                     break;
+        //             }
+        //             console.log(`ws message, item ${res.type}`);
+        //         }
+        //     }
+        //     return () => {
+        //         console.log('wsEffect - disconnecting');
+        //         canceled = true;
+        //         // socket.close();
+        //     }
 
-                }else if (type === 'resolvedConflict') {
-
-                }
-            });
-        }
-        return () => {
-            log('wsEffect - disconnecting');
-            canceled = true;
-            closeWebSocket?.();
-        }
     }
 };

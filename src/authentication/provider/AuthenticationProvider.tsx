@@ -21,6 +21,7 @@ export interface LoginState {
     password?: string;
     token: string;
     userType?: string;
+    socket:WebSocket|null
 }
 
 const loginInitialState: LoginState = {
@@ -29,6 +30,7 @@ const loginInitialState: LoginState = {
     authenticationError: null,
     pendingAuthentication: false,
     token: '',
+    socket:null
 }
 
 export interface SignupState {
@@ -55,7 +57,8 @@ export const SignupContext = React.createContext<SignupState>(signupInitialState
 
 
 interface AuthProviderProps {
-    children: PropTypes.ReactNodeLike
+    children: PropTypes.ReactNodeLike,
+    // socket: WebSocket
 }
 
 export const AuthenticationProvider: React.FC<AuthProviderProps> =
@@ -68,14 +71,37 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
             authenticationError,
             pendingAuthentication,
             token,
-            userType
+            userType,
+            socket
         } = loginState;
         const {isSigned, pendingSignup, signupError} = signupState
         const login = useCallback(loginCallback, [loginState]);
         const signup = useCallback<SignupFunction>(signupCallback, [])
         const logout = useCallback(logoutCallback, []);
         useEffect(authenticationEffect, [pendingAuthentication]);
-        const loginValue = {isAuthenticated, login, isAuthenticating, authenticationError, token, logout, userType};
+        useEffect(() =>{
+            let sock=new WebSocket(`ws://192.168.0.186:8080/gradi-ws`)
+            if(token.trim()) {
+                console.log("HAPPY HAPPY "+sock.readyState)
+                sock.onopen = () => {
+                    console.log("readyState" + sock.readyState)
+                    sock.send(token);
+                }
+                sock.onclose = () => {
+                    log('web socket onclose');
+                };
+                sock.onerror = error => {
+                    log('web socket onerror', error);
+                };
+                setLoginState({...loginState,socket:sock})
+
+                return () => {
+                    // socket.close();
+                }
+            }
+        },[token])
+
+        const loginValue = {isAuthenticated, login, isAuthenticating, authenticationError, token, logout, userType, socket};
         const signupValue = {isSigned, pendingSignup, signupError, signup}
         log('render');
 
@@ -93,7 +119,7 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
             setLoginState({
                 ...loginState,
                 pendingAuthentication: true,
-                authenticationError:null,
+                authenticationError: null,
                 username,
                 password
             });
@@ -108,7 +134,7 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
             });
             setSignedUpState({
                 ...signupState,
-                isSigned:false,
+                isSigned: false,
             });
             (async () => {
                 await Storage.clear();
@@ -118,6 +144,7 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
         function authenticationEffect() {
             let canceled = false;
             authenticate();
+
             return () => {
                 canceled = true;
             }
@@ -134,7 +161,7 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
                         isAuthenticated: true,
                         isAuthenticating: false,
                     });
-                }else{
+                } else {
                     setLoginState({
                         ...loginState,
                         token: '',
@@ -195,18 +222,18 @@ export const AuthenticationProvider: React.FC<AuthProviderProps> =
                 isSigned: false,
             });
             let res = await signupApi(user.firstName, user.lastName, user.email, user.status, user.username, user.password)
-            console.log(typeof(res.succeeded))
+            console.log(typeof (res.succeeded))
             if (res.succeeded === false) {
                 setSignedUpState({
                     ...signupState,
                     signupError: new Error(res.message),
                     pendingSignup: false,
-                    isSigned:false,
+                    isSigned: false,
                 });
-            }else{
+            } else {
                 setSignedUpState({
                     ...signupState,
-                    signupError:null,
+                    signupError: null,
                     pendingSignup: false,
                     isSigned: true,
                 });

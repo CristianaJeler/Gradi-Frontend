@@ -57,7 +57,6 @@ import {
     MediaProps
 } from "../../activities/provider/ActivitiesProvider";
 import {IonBackButtonInner} from "@ionic/react/dist/types/components/inner-proxies";
-import {BadgesContext} from "../../badges/provider/BadgeProvider";
 
 
 interface urlDetails {
@@ -75,6 +74,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
         addMemberToGroup,
         deleteMemberFromGroup,
         fetchGroupMembers,
+        username
     } = useContext(UserContext)
     const {getGroupDetails, getGroupDetailsError, currentGroup} = useContext(GroupContext);
     const {
@@ -83,10 +83,16 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
         fetchingActivities,
         answers,
         getActivitiesAssignedFromThisGroup,
-        groupActivities
+        groupActivities,
+        badges,
+        getAllBadges,
+        gettingBadges,
+        getBadgesError,
+        awardBadge,
+        awardBadgeError,
+        awardingBadge
     } = useContext(ActivitiesContext)
 
-    const {badges, getAllBadges, gettingBadges, getBadgesError} = useContext(BadgesContext)
 
 
     const [currentPage, setCurrentPage] = useState(0)
@@ -118,6 +124,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
     const [title, setTitle] = useState('')
     const [selectedActivity, setSelectedActivity] = useState<ActivityProps>({})
     const [selectedAnswer, setSelectedAnswer] = useState<AnswerProps>({})
+    const [selectedBadge, setSelectedBadge] = useState('')
 
 
     function checkGame(game: GameProps, checked: boolean) {
@@ -214,7 +221,8 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
             games: checkedGames,
             links: linksList,
             media: media,
-            groupId: currentGroup?.id
+            groupId: currentGroup?.id,
+            assignedBy:username
         }
         addActivity && addActivity(activity, checkedMembers)
     }
@@ -268,10 +276,18 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
 
     useEffect(() => {
         if (renderingComponent === 'badges') {
-            console.log("AICI IN TEACHER GROUP")
             getAllBadges && getAllBadges()
         }
     }, [renderingComponent]);
+
+    function deselectPic() {
+        const el = document.getElementById(selectedBadge);
+        if (el !== null) el.style.border = "dotted transparent";
+    }
+
+    function rewardBadge(userId: string) {
+        awardBadge && awardBadge(userId, selectedBadge)
+    }
 
     return (<>
         <IonPage>
@@ -282,7 +298,6 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                         class={"title"}>{currentGroup?.name}
                     </IonTitle>
                     <IonItem class={"renderingOption"} id={"membersOption"} onClick={() => {
-                        deselectOption();
                         let opt = document.getElementById("membersOption");
                         let ico = document.getElementById("membersOptionIcon");
                         if (opt !== null && ico !== null) {
@@ -463,7 +478,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                     <IonItem class={"newActivityItems addActivityComponentBtn"}>
                         <IonIcon icon={videocam} class={"addActivityComponentIcon"}/>
                         <label>
-                            <input type={"file"} accept={".mp4"} onChange={(e) => loadVideo(e)}/>
+                            <input type={"file"} accept={"video/mp4"} onChange={(e) => loadVideo(e)}/>
                             Atașează filmulețe</label>
                     </IonItem>
                     <div id={"mediaContent"} className={"newActivityLink"}>
@@ -670,7 +685,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                 {/*RECEIVED ANSWERS*/}
                 {
                     renderingComponent === "returnedAssigns" &&
-                    <IonContent class={"renderedComponent"} scrollY={false}>
+                    <IonContent class={"renderedComponent"}>
                         <IonTitle><u>Activități curente</u></IonTitle>
                         <IonList>
                             {groupActivities && groupActivities.map(act => {
@@ -693,7 +708,7 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
 
                 {
                     renderingComponent === "activityAnswers" &&
-                    <IonContent class={"renderedComponent"} scrollY={false}>
+                    <IonContent class={"renderedComponent"}>
                         <br/>
                         <IonFabButton onClick={() => {
                             setRenderingComponent("returnedAssigns");
@@ -726,6 +741,11 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                 {
                     renderingComponent === 'selectedAnswer' &&
                     <IonContent class={"renderedComponent"}>
+                        <br/>
+                        <IonFabButton onClick={() => {
+                            setRenderingComponent("activityAnswers");
+                        }}
+                                      id={"btnBack"}><IonIcon icon={arrowBack}/></IonFabButton>
                         <br/>
                         <IonItem lines={"none"} id={"answerComponentHeader"}>
                             <IonFabButton onClick={() => {
@@ -782,12 +802,22 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                         setRenderingComponent("selectedAnswer");
                     }}
                                   id={"btnBack"}><IonIcon icon={arrowBack}/></IonFabButton>
+                    <IonButton id={"giveBadgeBtn"} onClick={() => rewardBadge(selectedAnswer.userId!)}>Acordă
+                        insigna</IonButton>
                     <br/><br/><br/>
                     <IonRadioGroup>
                         {badges && badges.map(badge => {
-                            return <span className={"badgeDiv"}>
-                                <IonImg src={PICTURE_TYPE+badge.content} class={"badgeImg"}/>
-                            </span>
+                            return <IonAvatar className={"badgeDiv"} key={badge.id}>
+                                <IonImg src={PICTURE_TYPE + badge.content} id={badge.id!.toString()} class={"badgeImg"}
+                                        onClick={() => {
+                                            deselectPic();
+                                            setSelectedBadge(badge.id!.toString());
+                                            const el = document.getElementById(badge.id!.toString());
+                                            if (el !== null) {
+                                                el.style.border = "5px dotted blue";
+                                            }
+                                        }}/>
+                            </IonAvatar>
                         })}
                     </IonRadioGroup>
                 </IonContent>}
@@ -832,6 +862,13 @@ export const TeacherSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (
                 {getGroupDetailsError &&
                 <IonAlert isOpen={true} header={"A apărut o eroare!"}
                           message={"A apărut o problemă, iar datele grupei dumneavoastră nu au putut fi încărcate!"}/>}
+
+                {awardBadgeError &&
+                <IonAlert isOpen={true} header={"A apărut o eroare!"}
+                          message={awardBadgeError.message}/>}
+
+                {getBadgesError && <IonAlert isOpen={true} header={"A apărut o eroare!"}
+                                             message={getBadgesError.message}/>}
 
             </IonContent>
 

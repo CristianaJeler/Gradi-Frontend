@@ -32,9 +32,11 @@ import {
     ActivitiesContext,
     ActivityProps,
     GameResultProps,
-    MediaProps
+    MediaProps,
+    BadgeProps
 } from "../../activities/provider/ActivitiesProvider";
 import {PupilMenuBar} from "./PupilMenuBar";
+import {LoginContext} from "../../authentication";
 
 
 interface urlDetails {
@@ -46,9 +48,9 @@ export const PupilSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (pr
         searchUsers,
         username
     } = useContext(UserContext)
+    const {token}=useContext(LoginContext)
     const {getGroupDetails, getGroupDetailsError, currentGroup} = useContext(GroupContext);
-    const {currentActivities, getCurrentActivities, fetchingActivities, sendAnswer} = useContext(ActivitiesContext)
-
+    const {currentActivities, getCurrentActivities, fetchingActivities, sendAnswer,earnedBadges, getEarnedBadges} = useContext(ActivitiesContext)
 
     const [renderingComponent, setRenderingComponent] = useState('currentActivities')
     const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([])
@@ -133,6 +135,12 @@ export const PupilSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (pr
     }
 
 
+    useEffect(() => {
+        if (renderingComponent === 'earnedBadges') {
+            getEarnedBadges && getEarnedBadges(token)
+        }
+    }, [renderingComponent]);
+
     return (<>
         <IonPage>
             <PupilMenuBar/>
@@ -179,7 +187,7 @@ export const PupilSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (pr
 
                 {/*CURRENT ACTIVITIES*/}
                 {renderingComponent === "currentActivities" &&
-                <IonContent class={"renderedComponent"} scrollY={false}>
+                <IonContent class={"renderedComponent"}>
                     <IonList>
                         {/*{searchedUsers.length === 0 && <IonImg id={"searchMemberTitle"} src={squirrel}/>}*/}
                         {currentActivities && currentActivities.map(act => {
@@ -297,6 +305,24 @@ export const PupilSpecificGroup: React.FC<RouteComponentProps<urlDetails>> = (pr
                         <IonButton slot={"end"} onClick={sendAnswerHandle} id={"answerBtn"}>Răspunde</IonButton>
                     </IonItem>
                 </IonContent>}
+
+
+                {/*EARNED BADGES*/}
+                {renderingComponent === "earnedBadges" &&
+                <IonContent class={"renderedComponent"}>
+                    <IonTitle size={"large"}><u>Insignele primite...</u></IonTitle>
+                    <IonList>
+                        {earnedBadges && earnedBadges.map(badge => {
+                            return (<div className={"badgeDiv"} key={badge.id}>
+                                {<IonImg src={PICTURE_TYPE+badge.content} id={badge.id!.toString()} class={"badgeImg"}/>}
+                            </div>)
+                        })}
+
+                        <IonLoading isOpen={fetchingActivities} message={"Încărcăm lista de activități..."}/>
+
+                    </IonList>
+                </IonContent>}
+
             </IonContent>
         </IonPage>
     </>)

@@ -1,4 +1,4 @@
-export const baseUrl = 'localhost:8080/gradi';
+export const baseUrl = '192.168.0.186:8080/gradi';
 
 export const getLogger: (tag: string) => (...args: any) => void =
     tag => (...args) => console.log(tag, ...args);
