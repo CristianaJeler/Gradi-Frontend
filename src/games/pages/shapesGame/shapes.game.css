@@ -1,0 +1,11 @@
+#shapesGameParent{
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    border: solid black 3px;
+    margin-top: 1%;
+}
+
+#pageContent{
+    --ion-background-color:rgb(221, 236, 255);
+}

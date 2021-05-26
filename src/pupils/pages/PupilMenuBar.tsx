@@ -26,7 +26,7 @@ export const PupilMenuBar: React.FC = () => {
                     <IonItem class={"menuButton"} lines={"none"} routerLink={"/pupils/groups"}>
                         <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"}/> Grupele mele</IonLabel>
                     </IonItem>
-                    <NotificationsPopover/>
+                    {/* <NotificationsPopover/> */}
                     <SettingsPopover userType={"pupils"}/>
                 </IonToolbar>
             </IonHeader>

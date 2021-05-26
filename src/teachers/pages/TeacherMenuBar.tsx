@@ -1,5 +1,6 @@
-import React, { useEffect} from "react";
-import {IonHeader,
+import React, { useEffect } from "react";
+import {
+    IonHeader,
     IonIcon, IonImg,
     IonItem, IonLabel,
     IonToolbar
@@ -11,8 +12,8 @@ import {
 import "../../genericUser/design/menu.css"
 import "../../genericUser/design/general.header.css"
 import logo from "../../assets/img/favicon.png";
-import {SettingsPopover} from "../../genericUser/components/SettingsPopover";
-import {NotificationsPopover} from "../../genericUser/components/NotificationsPopover";
+import { SettingsPopover } from "../../genericUser/components/SettingsPopover";
+import { NotificationsPopover } from "../../genericUser/components/NotificationsPopover";
 
 export const TeacherMenuBar: React.FC = () => {
     useEffect(() => {
@@ -24,15 +25,15 @@ export const TeacherMenuBar: React.FC = () => {
         <>
             <IonHeader>
                 <IonToolbar id={"header"}>
-                    <IonImg id={"img"} src={logo} onClick={() => window.location.href = "/home"} title={"Acasă"}/>
+                    <IonImg id={"img"} src={logo} onClick={() => window.location.href = "/home"} title={"Acasă"} />
                     <IonItem class={"menuButton"} lines={"none"} routerLink={"/teachers/groups"}>
-                        <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"}/> Grupe</IonLabel>
+                        <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"} /> Grupe</IonLabel>
                     </IonItem>
                     <IonItem class={"menuButton"} lines={"none"} >
-                        <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"}/> Jocuri</IonLabel>
+                        <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"} /> Jocuri</IonLabel>
                     </IonItem>
-                    <NotificationsPopover/>
-                    <SettingsPopover userType={"teachers"}/>
+                    {/* <NotificationsPopover/> */}
+                    <SettingsPopover userType={"teachers"} />
                 </IonToolbar>
             </IonHeader>
         </>

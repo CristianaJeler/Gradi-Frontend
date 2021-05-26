@@ -1,14 +1,13 @@
-import {IonContent, IonIcon, IonItem, IonPage, IonText, IonTitle} from "@ionic/react";
-import React, {useEffect, useRef, useState} from "react";
-import {Footer} from "../../../genericUser/components/Footer";
-import {TeacherMenuBar} from "../../../teachers/pages/TeacherMenuBar";
+import { IonContent, IonIcon, IonItem, IonPage, IonText, IonTitle } from "@ionic/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Footer } from "../../../genericUser/components/Footer";
+import { TeacherMenuBar } from "../../../teachers/pages/TeacherMenuBar";
 import * as Phaser from 'phaser';
-import {GameScene} from "./GameScene";
-import {WelcomeScene} from "./WelcomeScene";
-import {ScoreScene} from "./ScoreScene";
-import {RouteComponentProps} from "react-router-dom";
+import { GameScene } from "./GameScene";
+import { WelcomeScene } from "./WelcomeScene";
+import { ScoreScene } from "./ScoreScene";
+import { RouteComponentProps } from "react-router-dom";
 import "./starfall.page.css"
-import {Storage} from "@capacitor/core";
 
 export class StarfallGame extends Phaser.Game {
     constructor(config: any) {
@@ -40,14 +39,14 @@ export const Starfall: React.FC<RouteComponentProps<urlDetails>> = (props) => {
 
     return (
         <IonPage>
-            <TeacherMenuBar/>
+            <TeacherMenuBar />
             <IonContent>
-                <IonContent scrollY={false} id={'starfallGameParent'}/>
+                <IonContent scrollY={false} id={'starfallGameParent'} />
                 <IonContent scrollY={false} id={"descriptionContent"}>
                     <IonTitle size={"large"}>Stelute</IonTitle>
                 </IonContent>
             </IonContent>
-            <Footer/>
+            <Footer />
         </IonPage>
     )
 };
