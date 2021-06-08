@@ -41,7 +41,7 @@ export const PupilsGroups: React.FC = () => {
     return (
         <IonPage>
             <PupilMenuBar/>
-            <IonContent>
+            <IonContent id="pupilsGroupPageContent">
                 <IonTitle id={"groupsTitle"}>Grupe</IonTitle>
                 <div id={"pageContent"}>
                     {groups && groups.map(x =>

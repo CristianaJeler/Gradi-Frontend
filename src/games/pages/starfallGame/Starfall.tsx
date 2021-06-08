@@ -39,14 +39,14 @@ export const Starfall: React.FC<RouteComponentProps<urlDetails>> = (props) => {
 
     return (
         <IonPage>
-            <TeacherMenuBar />
-            <IonContent>
-                <IonContent scrollY={false} id={'starfallGameParent'} />
-                <IonContent scrollY={false} id={"descriptionContent"}>
+            {/* <TeacherMenuBar /> */}
+            <IonContent id="pageContent">
+                <div id={'starfallGameParent'} />
+                {/* <IonContent scrollY={false} id={"descriptionContent"}>
                     <IonTitle size={"large"}>Stelute</IonTitle>
-                </IonContent>
+                </IonContent> */}
+                {/* <Footer /> */}
             </IonContent>
-            <Footer />
         </IonPage>
     )
 };

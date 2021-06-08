@@ -1,7 +1,7 @@
-import React, {useCallback, useContext, useEffect, useReducer, useState} from "react";
+import React, { useCallback, useContext, useEffect, useReducer, useState } from "react";
 import PropTypes from "prop-types";
-import {LoginContext} from "../../authentication";
-import {GameProps} from "../../games/provider/GamesProvider";
+import { LoginContext } from "../../authentication";
+import { GameProps } from "../../games/provider/GamesProvider";
 import {
     addActivity as addActivityApi, getCurrentActivities as getCurrentActivitiesApi, sendAnswer as sendAnswerApi,
     getAnswers as getAnswersApi, getActivitiesFromGroup as getActivitiesFromGroupApi,
@@ -9,7 +9,7 @@ import {
     getAllBadges as getAllBadgesApi,
     rewardBadge as rewardBadgeApi
 } from "../api/ActivitiesApi";
-import {PICTURE_TYPE} from "../../genericUser/utils/constants";
+import { PICTURE_TYPE } from "../../genericUser/utils/constants";
 
 // import {BadgeProps} from "../../badges/provider/BadgeProvider";
 
@@ -154,14 +154,14 @@ const GET_EARNED_BADGES_STARTED = 'GET_EARNED_BADGES_STARTED'
 const GET_EARNED_BADGES_FAILED = 'GET_EARNED_BADGES_FAILED'
 const GET_EARNED_BADGES_SUCCEEDED = 'GET_EARNED_BADGES_SUCCEEDED'
 
-const RECEIVED_NEW_BADGE='RECEIVED_NEW_BADGE'
+const RECEIVED_NEW_BADGE = 'RECEIVED_NEW_BADGE'
 
 const TEACHER_ADDED_ACTIVITY = 'TEACHER_ADDED_ACTIVITY'
 
-const RECEIVED_NEW_ANSWER='RECEIVED_NEW_ANSWER'
+const RECEIVED_NEW_ANSWER = 'RECEIVED_NEW_ANSWER'
 
 const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesState =
-    (state, {type, payload}) => {
+    (state, { type, payload }) => {
         switch (type) {
             case GET_ALL_GAMES_SUCCEEDED:
                 return {
@@ -177,7 +177,7 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
                     fetchGamesError: null
                 };
             case GET_ALL_GAMES_FAILED:
-                return {...state, fetchGamesError: payload.error, fetchGames: false};
+                return { ...state, fetchGamesError: payload.error, fetchGames: false };
             case GET_CURRENT_ACTIVITIES_SUCCEEDED:
                 return {
                     ...state,
@@ -186,11 +186,11 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
                     fetchActivitiesError: null
                 };
             case GET_CURRENT_ACTIVITIES_STARTED:
-                return {...state, fetchingActivities: true}
+                return { ...state, fetchingActivities: true }
             case GET_CURRENT_ACTIVITIES_FAILED:
-                return {...state, fetchActivitiesError: payload.error}
+                return { ...state, fetchActivitiesError: payload.error }
             case GET_ANSWERS_SUCCEEDED:
-                return {...state, answers: payload.answers}
+                return { ...state, answers: payload.answers }
             case GET_GROUP_ACTIVITIES_SUCCEEDED:
                 return {
                     ...state,
@@ -199,13 +199,13 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
                     fetchActivitiesError: null
                 };
             case GET_GROUP_ACTIVITIES_STARTED:
-                return {...state, fetchingActivities: true}
+                return { ...state, fetchingActivities: true }
             case GET_GROUP_ACTIVITIES_FAILED:
-                return {...state, fetchActivitiesError: payload.error}
+                return { ...state, fetchActivitiesError: payload.error }
             case TEACHER_ADDED_ACTIVITY:
                 let activities = [...(state.currentActivities || [])]
                 activities.push(payload.activity)
-                return {...state, currentActivities: activities}
+                return { ...state, currentActivities: activities }
             case GET_ALL_BADGES_SUCCEEDED:
                 return {
                     ...state,
@@ -220,9 +220,9 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
                     getBadgesError: null
                 };
             case GET_ALL_BADGES_FAILED:
-                return {...state, getBadgesError: payload.error, gettingBadges: false};
+                return { ...state, getBadgesError: payload.error, gettingBadges: false };
             case AWARD_BADGE_FAILED:
-                return {...state, awardBadgeError: payload.error, awardingBadge: false};
+                return { ...state, awardBadgeError: payload.error, awardingBadge: false };
             case AWARD_BADGE_STARTED:
                 return {
                     ...state,
@@ -242,7 +242,7 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
                     getBadgesError: null
                 };
             case GET_EARNED_BADGES_FAILED:
-                return {...state, getBadgesError: payload.error, gettingBadges: false};
+                return { ...state, getBadgesError: payload.error, gettingBadges: false };
             case GET_EARNED_BADGES_SUCCEEDED:
                 return {
                     ...state,
@@ -253,26 +253,26 @@ const reducer: (state: ActivitiesState, action: ActionProperties) => ActivitiesS
             case RECEIVED_NEW_BADGE:
                 console.log(payload.badge.content)
                 let badges = [...(state.earnedBadges || [])]
-                let content=payload.badge.content+''
-                content=content.split(PICTURE_TYPE)[0]
-                if(content) payload.badge.content=content
-                if(badges.filter(b=>b.id===payload.badge.id).length===0){
+                let content = payload.badge.content + ''
+                content = content.split(PICTURE_TYPE)[0]
+                if (content) payload.badge.content = content
+                if (badges.filter(b => b.id === payload.badge.id).length === 0) {
                     badges.push(payload.badge)
                     console.log(badges)
                 }
-                return {...state, earnedBadges: badges}
+                return { ...state, earnedBadges: badges }
             case RECEIVED_NEW_ANSWER:
                 let answers = [...(state.answers || [])]
                 answers.push(payload.answer)
-                return {...state,answers:answers}
+                return { ...state, answers: answers }
             default:
                 return state;
         }
     };
 
 
-export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}) => {
-    const {token} = useContext(LoginContext)
+export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({ children }) => {
+    const { token } = useContext(LoginContext)
     const [state, dispatch] = useReducer(reducer, initialState);
     const {
         currentActivities,
@@ -293,7 +293,7 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
     const sendAnswer = useCallback<SendAnswerFunction>(sendAnswerCallback, [token])
     const getAnswers = useCallback<GetAnswersFunction>(getAnswersCallback, [token])
     const getActivitiesAssignedFromThisGroup = useCallback<GetActivitiesFromThisGroup>(getActivitiesFromThisGroupCallback, [token])
-    const {socket} = useContext(LoginContext)
+    const { socket } = useContext(LoginContext)
     const getAllBadges = useCallback<GetAllBadgesFunction>(getAllBadgesCallback, [token])
     const awardBadge = useCallback<AwardBadgeFunction>(awardBadgeCallback, [token])
     const getEarnedBadges = useCallback<GetEarnedBadgesFunction>(getEarnedBadgesCallback, [token])
@@ -302,12 +302,12 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: GET_ALL_BADGES_STARTED})
+            dispatch({ type: GET_ALL_BADGES_STARTED })
             try {
                 let badges = await getAllBadgesApi(token)
-                dispatch({type: GET_ALL_BADGES_SUCCEEDED, payload: {badges: badges}})
+                dispatch({ type: GET_ALL_BADGES_SUCCEEDED, payload: { badges: badges } })
             } catch (error) {
-                dispatch({type: GET_ALL_BADGES_FAILED, payload: {error}})
+                dispatch({ type: GET_ALL_BADGES_FAILED, payload: { error } })
             }
         }
     }
@@ -317,17 +317,17 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: AWARD_BADGE_STARTED})
+            dispatch({ type: AWARD_BADGE_STARTED })
             try {
                 if (badgeId.trim() !== '' && userId.trim() !== '') {
                     let badge = Number.parseInt(badgeId || '')
                     await rewardBadgeApi(token, badge, userId)
-                    dispatch({type: AWARD_BADGE_SUCCEEDED})
+                    dispatch({ type: AWARD_BADGE_SUCCEEDED })
                 } else {
-                    dispatch({type: AWARD_BADGE_FAILED, payload: {error: new Error("Selectați o insignă!")}})
+                    dispatch({ type: AWARD_BADGE_FAILED, payload: { error: new Error("Selectați o insignă!") } })
                 }
             } catch (error) {
-                dispatch({type: AWARD_BADGE_FAILED, payload: {error}})
+                dispatch({ type: AWARD_BADGE_FAILED, payload: { error } })
             }
         }
     }
@@ -337,58 +337,58 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: GET_EARNED_BADGES_STARTED})
+            dispatch({ type: GET_EARNED_BADGES_STARTED })
             try {
                 let badges = await earnedBadgesApi(token, token)
-                dispatch({type: GET_EARNED_BADGES_SUCCEEDED, payload: {badges: badges}})
+                dispatch({ type: GET_EARNED_BADGES_SUCCEEDED, payload: { badges: badges } })
             } catch (error) {
-                dispatch({type: GET_EARNED_BADGES_FAILED, payload: {error}})
+                dispatch({ type: GET_EARNED_BADGES_FAILED, payload: { error } })
             }
         }
     }
-    useEffect(()=>{
-            let canceled = false;
-            if (token?.trim()) {
-                if (canceled) {
-                    return;
+    useEffect(() => {
+        let canceled = false;
+        if (token?.trim()) {
+            if (canceled) {
+                return;
+            }
+            if (socket !== null) {
+                socket.onmessage = messageEvent => {
+                    console.log('web socket onmessage ' + messageEvent.data);
+                    let res = JSON.parse(messageEvent.data);
+                    switch (res.type) {
+                        case "addedActivity":
+                            dispatch({ type: TEACHER_ADDED_ACTIVITY, payload: { activity: res.result } })
+                            break;
+                        case "newBadge":
+                            dispatch({ type: RECEIVED_NEW_BADGE, payload: { badge: res.result } })
+                            break;
+                        case "addedAnswer":
+                            dispatch({ type: RECEIVED_NEW_ANSWER, payload: { answer: res.result } })
+                            break;
+                    }
+                    console.log(`ws message, item ${res.type}`);
                 }
-                if (socket !== null) {
-                    socket.onmessage = messageEvent => {
-                        console.log('web socket onmessage ' + messageEvent.data);
-                        let res = JSON.parse(messageEvent.data);
-                        switch (res.type) {
-                            case "addedActivity":
-                                dispatch({type: TEACHER_ADDED_ACTIVITY, payload: {activity: res.result}})
-                                break;
-                            case "newBadge":
-                                dispatch({type:RECEIVED_NEW_BADGE,payload:{badge:res.result}})
-                                break;
-                            case "addedAnswer":
-                                dispatch({type:RECEIVED_NEW_ANSWER,payload:{answer:res.result}})
-                                break;
-                        }
-                        console.log(`ws message, item ${res.type}`);
-                    }
-                    // }
-                    return () => {
+                // }
+                return () => {
 
-                    }
                 }
             }
+        }
 
-        })
+    })
 
     async function addActivityCallback(activity: ActivityProps, members: string[]) {
         console.log('addActivityCallback')
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: ADD_ACTIVITY_STARTED})
+            dispatch({ type: ADD_ACTIVITY_STARTED })
             try {
                 await addActivityApi(token, activity, members)
-                dispatch({type: ADD_ACTIVITY_SUCCEEDED})
+                dispatch({ type: ADD_ACTIVITY_SUCCEEDED })
             } catch (error) {
-                dispatch({type: ADD_ACTIVITY_FAILED, payload: {error}})
+                dispatch({ type: ADD_ACTIVITY_FAILED, payload: { error } })
             }
         }
     }
@@ -398,12 +398,12 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: GET_CURRENT_ACTIVITIES_STARTED})
+            dispatch({ type: GET_CURRENT_ACTIVITIES_STARTED })
             try {
                 let activities = await getCurrentActivitiesApi(token, memberId, groupId)
-                dispatch({type: GET_CURRENT_ACTIVITIES_SUCCEEDED, payload: {activities}})
+                dispatch({ type: GET_CURRENT_ACTIVITIES_SUCCEEDED, payload: { activities } })
             } catch (error) {
-                dispatch({type: GET_CURRENT_ACTIVITIES_FAILED, payload: {error}})
+                dispatch({ type: GET_CURRENT_ACTIVITIES_FAILED, payload: { error } })
             }
         }
     }
@@ -413,12 +413,12 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: SEND_ANSWER_STARTED})
+            dispatch({ type: SEND_ANSWER_STARTED })
             try {
                 await sendAnswerApi(token, answer)
-                dispatch({type: SEND_ANSWER_SUCCEEDED})
+                dispatch({ type: SEND_ANSWER_SUCCEEDED })
             } catch (error) {
-                dispatch({type: SEND_ANSWER_FAILED, payload: {error}})
+                dispatch({ type: SEND_ANSWER_FAILED, payload: { error } })
             }
         }
     }
@@ -428,12 +428,12 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: GET_ANSWERS_STARTED})
+            dispatch({ type: GET_ANSWERS_STARTED })
             try {
                 let answers = await getAnswersApi(token, activityId)
-                dispatch({type: GET_ANSWERS_SUCCEEDED, payload: {answers: answers}})
+                dispatch({ type: GET_ANSWERS_SUCCEEDED, payload: { answers: answers } })
             } catch (error) {
-                dispatch({type: GET_ANSWERS_FAILED, payload: {error}})
+                dispatch({ type: GET_ANSWERS_FAILED, payload: { error } })
             }
         }
     }
@@ -443,12 +443,12 @@ export const ActivitiesProvider: React.FC<ActivitiesProviderProps> = ({children}
         if (!token.trim()) {
             return
         } else {
-            dispatch({type: GET_GROUP_ACTIVITIES_STARTED})
+            dispatch({ type: GET_GROUP_ACTIVITIES_STARTED })
             try {
                 let activities = await getActivitiesFromGroupApi(token, groupId)
-                dispatch({type: GET_GROUP_ACTIVITIES_SUCCEEDED, payload: {activities: activities}})
+                dispatch({ type: GET_GROUP_ACTIVITIES_SUCCEEDED, payload: { activities: activities } })
             } catch (error) {
-                dispatch({type: GET_GROUP_ACTIVITIES_FAILED, payload: {error}})
+                dispatch({ type: GET_GROUP_ACTIVITIES_FAILED, payload: { error } })
             }
         }
     }

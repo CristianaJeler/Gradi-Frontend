@@ -19,6 +19,7 @@ interface urlDetails {
 }
 export const Shapes: React.FC<RouteComponentProps<urlDetails>> = (props) => {
     useEffect(() => {
+        console.log(props.match.params.act)
         new ShapesGame({
             title: "Shapes",
             width: 900,
@@ -33,17 +34,15 @@ export const Shapes: React.FC<RouteComponentProps<urlDetails>> = (props) => {
             },
             backgroundColor: "transparent"
         });
-
     }, [props.match.params.act])
-
     return (
-        <IonPage>
-            <TeacherMenuBar />
-            <IonContent id={"pageContent"}>
-                <div id={'shapesGameParent'} />
-            </IonContent>
-            <Footer />
-        </IonPage>
+        // <IonPage>
+        //     <TeacherMenuBar />
+        <IonContent id={"pageContent"}>
+            <div id={'shapesGameParent'} />
+        </IonContent>
+        //     <Footer />
+        // </IonPage>
     )
 };
 export default Shapes;

@@ -8,7 +8,7 @@ export class ShapesWelcomeScene extends Phaser.Scene {
         });
     }
     preload(): void {
-        this.load.setBaseURL("https://github.com/CristianaJeler/Gradi-Frontend/blob/286496a4e7ddfef1d69fd445d0fa2bc03c3cec52/src/games/pages/shapesGame")
+        this.load.setBaseURL("http://192.168.0.186:5500/src/games/pages/shapesGame/")
         this.load.image('startButton', 'assets/play_btn.png');
         this.load.image('background', 'assets/wellcome_background.png')
     }

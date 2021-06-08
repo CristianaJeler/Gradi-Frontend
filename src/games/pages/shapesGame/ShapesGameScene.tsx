@@ -28,7 +28,7 @@ export class ShapesGameScene extends Phaser.Scene {
         // console.log(this.objects)
     }
     preload(): void {
-        this.load.setBaseURL("http://localhost:5500/src/games/pages/shapesGame/")
+        this.load.setBaseURL("http://192.168.0.186:5500/src/games/pages/shapesGame/")
         this.load.image("ball", "assets/ball.png");
         this.load.image("sky", "assets/sky.png");
         this.load.image("present", "assets/present.png");

@@ -1,13 +1,23 @@
 #descriptionContent{
-    float:right;
+    /* float:right;
     --ion-background-color: rgba(139, 189, 243, 0.48);
     max-width: 47%;
     box-shadow: 10px 10px 50px 10px #81a0ec;
-    color: #051d5a;
+    color: #051d5a; */
 }
 
 #starfallGameParent{
-    float: left;
+    /* float: left;
     max-width: 53%;
-    box-shadow: 10px 10px 10px 10px #5684f5;
+    box-shadow: 10px 10px 10px 10px #5684f5; */
+
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+    border: solid black 3px;
+    margin-top: 1%;
+}
+
+#pageContent{
+    --ion-background-color:rgb(221, 236, 255);
 }

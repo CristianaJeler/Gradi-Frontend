@@ -29,9 +29,9 @@ export const TeacherMenuBar: React.FC = () => {
                     <IonItem class={"menuButton"} lines={"none"} routerLink={"/teachers/groups"}>
                         <IonLabel><IonIcon slot="start" icon={peopleCircle} class={"menuIcon"} /> Grupe</IonLabel>
                     </IonItem>
-                    <IonItem class={"menuButton"} lines={"none"} >
+                    {/* <IonItem class={"menuButton"} lines={"none"} >
                         <IonLabel><IonIcon slot="start" icon={extensionPuzzle} class={"menuIcon"} /> Jocuri</IonLabel>
-                    </IonItem>
+                    </IonItem> */}
                     {/* <NotificationsPopover/> */}
                     <SettingsPopover userType={"teachers"} />
                 </IonToolbar>

@@ -9,6 +9,7 @@ export class ShapesScoreScene extends Phaser.Scene {
         super({
             key: "ShapesScoreScene"
         });
+        console.log(activityId)
         if (activityId) this.activityId = activityId
     }
     preload(): void {
@@ -18,11 +19,16 @@ export class ShapesScoreScene extends Phaser.Scene {
     init(params: any): void {
         this.score = params.points;
         const storeScore = async () => {
-            const scores = await Storage.get({ key: "gamesResults" });
-            const scoresList = JSON.parse(scores.value || '[]');
-            if (!scoresList.includes((sc: { game: string, score: number }) => sc.game === "Shapes"))
-                scoresList.push({ game: "Shapes", result: this.score })
-            if (this.activityId) await Storage.set({ key: "gamesResults_" + this.activityId, value: JSON.stringify(scoresList) })
+            const scores = await Storage.get({ key: "gamesResults_" + this.activityId });
+            const scoresList = [...JSON.parse(scores.value || '[]')];
+
+            let idx = scoresList.findIndex(e => e.game === "Forme geometrice")
+            if (idx === -1) scoresList.push({ game: "Forme geometrice", result: this.score })
+            else scoresList.splice(idx, 1, { game: "Forme geometrice", result: this.score })
+
+            if (this.activityId) {
+                await Storage.set({ key: "gamesResults_" + this.activityId, value: JSON.stringify(scoresList) })
+            }
         }
         storeScore();
     }
